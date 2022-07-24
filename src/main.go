@@ -7,18 +7,18 @@ import (
 type Cell int8
 
 const (
-	Mine    Cell = 9
-	Closed       = -1
-	Opened       = -2
-	Flagged      = 0
-	One          = 1
-	Two          = 2
-	Three        = 3
-	Four         = 4
-	Five         = 5
-	Six          = 6
-	Seven        = 7
-	Eight        = 8
+	Mine Cell = iota
+	Closed
+	Opened
+	Flagged
+	One
+	Two
+	Three
+	Four
+	Five
+	Six
+	Seven
+	Eight
 )
 
 type Board [][]Cell
@@ -47,8 +47,26 @@ type Game struct {
 	state         GameState
 }
 
-func (b Board) CalcNeighbors(x, y int) Cell {
-	return b[x][y]
+func (b Board) CalcNeighbors(y, x int) int {
+	count := 0
+	dxs := []int{-1, 0, 1}
+	dys := []int{0, 1, -1}
+
+	isOutOfBounds := func(dx, dy int) bool {
+		return x+dx > 2 || x+dx < 0 || y+dy > 2 || y+dy < 0
+	}
+
+	for _, dx := range dxs {
+		for _, dy := range dys {
+			if isOutOfBounds(dx, dy) || (dx == 0 && dy == 0) {
+				continue
+			}
+			if b[y+dy][x+dx] == Mine {
+				count++
+			}
+		}
+	}
+	return count
 }
 
 func (g *Game) OpenCell(x, y int) {
@@ -87,8 +105,6 @@ func generateMines(width, height int) [][]bool {
 		}
 	}
 
-	ret[width-2][height-1] = true
-
 	return ret
 }
 
@@ -97,8 +113,11 @@ func (g *Game) IntegrateMines() {
 	for i := 0; i < g.width; i++ {
 		for j := 0; j < g.height; j++ {
 			if mines[i][j] {
+        fmt.Println("mining")
 				g.board[i][j] = Mine
-			}
+			} else {
+        g.board[i][j] = Closed
+      }
 		}
 	}
 
