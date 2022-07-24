@@ -33,7 +33,7 @@ func TestNewGame(t *testing.T) {
 			}
 		}
 	}
-	assert.Equal(t, mineCount, 10)
+	assert.Equal(t, 9, mineCount)
 }
 
 func TestCalcNeighbors(t *testing.T) {
