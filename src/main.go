@@ -26,23 +26,23 @@ type Board [][]Cell
 type GameState uint8
 
 const (
-	Playing GameState = 1
-	Win               = 2
-	Lose              = 3
+	Playing GameState = iota
+	Win
+	Lose
 )
 
 // placeholder for adding set difficulties
 type Difficulty uint8
 
 const (
-	Beginner     Difficulty = 10 // 9x9, 10 mines
-	Intermediate            = 40 // 16x16, 40 mines
-	Expert                  = 99 // 30x16, 99 mines
+	Beginner     = 10 // 9x9, 10 mines
+	Intermediate = 40 // 16x16, 40 mines
+	Expert       = 99 // 30x16, 99 mines
 )
 
 type Game struct {
 	width, height int
-	mineCount     int // 1, 2, 3 = beginner, intermediate, expert
+	mineCount     int
 	board         Board
 	state         GameState
 }
@@ -113,14 +113,12 @@ func (g *Game) IntegrateMines() {
 	for i := 0; i < g.width; i++ {
 		for j := 0; j < g.height; j++ {
 			if mines[i][j] {
-        fmt.Println("mining")
 				g.board[i][j] = Mine
 			} else {
-        g.board[i][j] = Closed
-      }
+				g.board[i][j] = Closed
+			}
 		}
 	}
-
 }
 
 func NewGame() *Game {
@@ -142,6 +140,4 @@ func main() {
 	game := NewGame()
 	game.PrintBoard()
 	fmt.Println(game.board.CalcNeighbors(0, 0))
-
-	fmt.Println(generateMines(9, 9))
 }
