@@ -7,7 +7,7 @@ import (
 )
 
 func TestNewGame(t *testing.T) {
-	game := NewGame()
+	game := NewGame(Beginner)
 
 	assert.Equal(t, game.width, 9)
 	assert.Equal(t, game.height, 9)
@@ -16,7 +16,7 @@ func TestNewGame(t *testing.T) {
 	assert.Equal(t, game.state, Playing)
 
 	mineCount := 0
-	for _, row := range game.board {
+	for _, row := range *(game.board) {
 		for _, cell := range row {
 			if cell == Mine {
 				mineCount++

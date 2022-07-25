@@ -7,10 +7,7 @@ import (
 type Cell int8
 
 const (
-	Mine Cell = iota
-	Closed
-	Opened
-	Flagged
+	None Cell = iota
 	One
 	Two
 	Three
@@ -19,6 +16,9 @@ const (
 	Six
 	Seven
 	Eight
+	Mine
+	Closed
+	Flagged
 )
 
 type Board [][]Cell
@@ -31,19 +31,19 @@ const (
 	Lose
 )
 
-// placeholder for adding set difficulties
-type Difficulty uint8
+type DifficultyLevel uint8
 
 const (
-	Beginner     = 10 // 9x9, 10 mines
-	Intermediate = 40 // 16x16, 40 mines
-	Expert       = 99 // 30x16, 99 mines
+	Beginner DifficultyLevel = iota
+	Intermediate
+	Expert
+	Custom
 )
 
 type Game struct {
 	width, height int
 	mineCount     int
-	board         Board
+	board         *Board
 	state         GameState
 }
 
@@ -108,36 +108,83 @@ func generateMines(width, height int) [][]bool {
 	return ret
 }
 
-func (g *Game) IntegrateMines() {
-	mines := generateMines(g.width, g.height)
-	for i := 0; i < g.width; i++ {
-		for j := 0; j < g.height; j++ {
-			if mines[i][j] {
-				g.board[i][j] = Mine
+func (b *Board) IntergrateMines(width, height, mines int) {
+	mineBoard := generateMines(width, height)
+	for i := 0; i < width; i++ {
+		for j := 0; j < height; j++ {
+			if mineBoard[i][j] {
+				(*b)[i][j] = Mine
 			} else {
-				g.board[i][j] = Closed
+				(*b)[i][j] = Closed
 			}
 		}
 	}
 }
 
-func NewGame() *Game {
-	width, height := 9, 9
-	board := buildIntArray(width, height)
-	game := &Game{width, height, 10, board, Playing}
-	game.IntegrateMines()
+// TODO: get inputs from user
+func GetCustomBoardParams() (int, int, int) {
+	return 9, 9, 10
+}
+
+func GetBoardParams(difficulty DifficultyLevel) (int, int, int) {
+	var width, height, mines int
+	switch difficulty {
+	case Beginner:
+		width, height, mines = 9, 9, 10
+	case Intermediate:
+		width, height, mines = 16, 16, 40
+	case Expert:
+		width, height, mines = 30, 16, 99
+	case Custom:
+		width, height, mines = GetCustomBoardParams()
+	}
+	return width, height, mines
+}
+
+func NewBoard(width, height, mines int) *Board {
+	board := make(Board, width)
+	for i := range board {
+		board[i] = make([]Cell, height)
+	}
+
+	board.IntergrateMines(width, height, mines)
+
+	return &board
+}
+
+func NewGame(difficulty DifficultyLevel) *Game {
+	width, height, mines := GetBoardParams(difficulty)
+	board := NewBoard(width, height, mines)
+	game := &Game{width, height, mines, board, Playing}
 	return game
 }
 
-func (g *Game) PrintBoard() {
-	for i := range g.board {
-		fmt.Println(g.board[i])
+func NewTestGame(board *Board) *Game {
+  b := *board
+  width, height := len(b), len(b[0])
+	game := &Game{width, height, -1, board, Playing}
+	return game
+}
+
+func (g Game) PrintBoard() {
+	board := *(g.board)
+	for i := range board {
+		fmt.Println(board[i])
 	}
 }
 
 func main() {
 	fmt.Println("hello world!")
-	game := NewGame()
+	game := NewGame(Beginner)
 	game.PrintBoard()
 	fmt.Println(game.board.CalcNeighbors(0, 0))
+
+  b := Board{
+    {Mine, Closed, Mine},
+    {Closed, Closed, Closed},
+    {Mine, Closed, Mine},
+  }
+
+  testGame := NewTestGame(&b)
+  testGame.PrintBoard()
 }
