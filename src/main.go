@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"math/rand"
+	"time"
 )
 
 type Cell int8
@@ -21,7 +23,15 @@ const (
 	Flagged
 )
 
-type Board [][]Cell
+type Cells [][]Cell
+
+// TODO: deprecate above type for below struct
+type Board struct {
+	cells     [][]Cell
+	width     int
+	height    int
+	mineCount int
+}
 
 type GameState uint8
 
@@ -40,6 +50,7 @@ const (
 	Custom
 )
 
+// TODO: make this apart of the Board struct (see above)
 type Difficulty struct {
 	width     int
 	height    int
@@ -47,12 +58,12 @@ type Difficulty struct {
 }
 
 type Game struct {
-	difficulty    Difficulty
-	board         *Board
-	state         GameState
+	difficulty Difficulty
+	board      *Cells
+	state      GameState
 }
 
-func (b Board) CalcNeighbors(y, x int) int {
+func (b Cells) CalcNeighbors(y, x int) int {
 	count := 0
 	dxs := []int{-1, 0, 1}
 	dys := []int{0, 1, -1}
@@ -74,14 +85,14 @@ func (b Board) CalcNeighbors(y, x int) int {
 	return count
 }
 
-func (g *Game) OpenCell(x, y int) {
-	if g.board[x][y] == Mine {
-		g.state = Lose
-	}
-
-	// check neighboring cells and set the number for current cell
-	// open any neighboring cell if current cell is a zero
-}
+// func (g *Game) OpenCell(x, y int) {
+// 	if g.board[x][y] == Mine {
+// 		g.state = Lose
+// 	}
+//
+// 	// check neighboring cells and set the number for current cell
+// 	// open any neighboring cell if current cell is a zero
+// }
 
 func buildBoolArray(width, height int) [][]bool {
 	ret := make([][]bool, width)
@@ -91,12 +102,39 @@ func buildBoolArray(width, height int) [][]bool {
 	return ret
 }
 
-func buildIntArray(width, height int) [][]Cell {
-	ret := make([][]Cell, width)
-	for i := range ret {
-		ret[i] = make([]Cell, height)
+func isDuplicateMineCoord(newX, newY int, mines [][2]int) bool {
+	for _, coord := range mines {
+		x, y := coord[0], coord[1]
+		if x == newX && y == newY {
+			return true
+		}
+	}
+	return false
+
+}
+
+func coordinateArray(count, defaultX, defaultY int) [][2]int {
+	ret := make([][2]int, count)
+	for i := 0; i < count; i++ {
+		ret[i] = [2]int{defaultX, defaultY}
 	}
 	return ret
+}
+
+func mineCoordinates(difficulty Difficulty) [][2]int {
+	mineCount := 0
+	mines := coordinateArray(difficulty.mineCount, -1, -1)
+
+	for mineCount < difficulty.mineCount {
+		x := rand.Intn(difficulty.width)
+		y := rand.Intn(difficulty.height)
+		if !isDuplicateMineCoord(x, y, mines) {
+			mines[mineCount] = [2]int{x, y}
+			mineCount++
+		}
+	}
+
+	return mines
 }
 
 // TODO: make random and also refactor this. this is dumb
@@ -112,16 +150,11 @@ func generateMines(difficulty Difficulty) [][]bool {
 	return ret
 }
 
-func (b *Board) IntergrateMines(difficulty Difficulty) {
-	mineBoard := generateMines(difficulty)
-	for i := 0; i < difficulty.width; i++ {
-		for j := 0; j < difficulty.height; j++ {
-			if mineBoard[i][j] {
-				(*b)[i][j] = Mine
-			} else {
-				(*b)[i][j] = Closed
-			}
-		}
+func (b *Cells) IntergrateMines(difficulty Difficulty) {
+	mineCoords := mineCoordinates(difficulty)
+	for _, coord := range mineCoords {
+		x, y := coord[0], coord[1]
+		(*b)[y][x] = Mine
 	}
 }
 
@@ -145,15 +178,24 @@ func GetBoardParams(level DifficultyLevel) Difficulty {
 	return Difficulty{width, height, mines}
 }
 
-func NewBoard(difficulty Difficulty) *Board {
-	board := make(Board, difficulty.width)
-	for i := range board {
-		board[i] = make([]Cell, difficulty.height)
+func CreateBlankBoard(difficulty Difficulty) *Cells {
+	cells := make(Cells, difficulty.height)
+	for i := range cells {
+		cells[i] = make([]Cell, difficulty.width)
 	}
 
-	board.IntergrateMines(difficulty)
+	for _, row := range cells {
+		for i := range row {
+			row[i] = None
+		}
+	}
+	return &cells
+}
 
-	return &board
+func NewBoard(difficulty Difficulty) *Cells {
+	cells := CreateBlankBoard(difficulty)
+	cells.IntergrateMines(difficulty)
+	return cells
 }
 
 func NewGame(level DifficultyLevel) *Game {
@@ -163,11 +205,11 @@ func NewGame(level DifficultyLevel) *Game {
 	return game
 }
 
-func NewTestGame(board *Board) *Game {
-	b := *board
+func NewTestGame(c *Cells) *Game {
+	b := *c
 	width, height := len(b), len(b[0])
-  difficulty := Difficulty{width, height, -1}
-	game := &Game{difficulty, board, Playing}
+	difficulty := Difficulty{width, height, -1}
+	game := &Game{difficulty, c, Playing}
 	return game
 }
 
