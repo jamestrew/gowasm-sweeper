@@ -9,9 +9,8 @@ import (
 func TestNewGame(t *testing.T) {
 	game := NewGame(Beginner)
 
-	assert.Equal(t, game.width, 9)
-	assert.Equal(t, game.height, 9)
-	assert.Equal(t, game.width, 9)
+	assert.Equal(t, game.difficulty.width, 9)
+	assert.Equal(t, game.difficulty.height, 9)
 	assert.Equal(t, game.state, Playing)
 	assert.Equal(t, game.state, Playing)
 

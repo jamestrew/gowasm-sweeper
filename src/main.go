@@ -40,9 +40,14 @@ const (
 	Custom
 )
 
+type Difficulty struct {
+	width     int
+	height    int
+	mineCount int
+}
+
 type Game struct {
-	width, height int
-	mineCount     int
+	difficulty    Difficulty
 	board         *Board
 	state         GameState
 }
@@ -95,8 +100,8 @@ func buildIntArray(width, height int) [][]Cell {
 }
 
 // TODO: make random and also refactor this. this is dumb
-func generateMines(width, height int) [][]bool {
-	ret := buildBoolArray(width, height)
+func generateMines(difficulty Difficulty) [][]bool {
+	ret := buildBoolArray(difficulty.width, difficulty.height)
 	for i := range ret {
 		for j := range ret[i] {
 			if i == j {
@@ -104,14 +109,13 @@ func generateMines(width, height int) [][]bool {
 			}
 		}
 	}
-
 	return ret
 }
 
-func (b *Board) IntergrateMines(width, height, mines int) {
-	mineBoard := generateMines(width, height)
-	for i := 0; i < width; i++ {
-		for j := 0; j < height; j++ {
+func (b *Board) IntergrateMines(difficulty Difficulty) {
+	mineBoard := generateMines(difficulty)
+	for i := 0; i < difficulty.width; i++ {
+		for j := 0; j < difficulty.height; j++ {
 			if mineBoard[i][j] {
 				(*b)[i][j] = Mine
 			} else {
@@ -126,9 +130,9 @@ func GetCustomBoardParams() (int, int, int) {
 	return 9, 9, 10
 }
 
-func GetBoardParams(difficulty DifficultyLevel) (int, int, int) {
+func GetBoardParams(level DifficultyLevel) Difficulty {
 	var width, height, mines int
-	switch difficulty {
+	switch level {
 	case Beginner:
 		width, height, mines = 9, 9, 10
 	case Intermediate:
@@ -138,31 +142,32 @@ func GetBoardParams(difficulty DifficultyLevel) (int, int, int) {
 	case Custom:
 		width, height, mines = GetCustomBoardParams()
 	}
-	return width, height, mines
+	return Difficulty{width, height, mines}
 }
 
-func NewBoard(width, height, mines int) *Board {
-	board := make(Board, width)
+func NewBoard(difficulty Difficulty) *Board {
+	board := make(Board, difficulty.width)
 	for i := range board {
-		board[i] = make([]Cell, height)
+		board[i] = make([]Cell, difficulty.height)
 	}
 
-	board.IntergrateMines(width, height, mines)
+	board.IntergrateMines(difficulty)
 
 	return &board
 }
 
-func NewGame(difficulty DifficultyLevel) *Game {
-	width, height, mines := GetBoardParams(difficulty)
-	board := NewBoard(width, height, mines)
-	game := &Game{width, height, mines, board, Playing}
+func NewGame(level DifficultyLevel) *Game {
+	difficulty := GetBoardParams(level)
+	board := NewBoard(difficulty)
+	game := &Game{difficulty, board, Playing}
 	return game
 }
 
 func NewTestGame(board *Board) *Game {
-  b := *board
-  width, height := len(b), len(b[0])
-	game := &Game{width, height, -1, board, Playing}
+	b := *board
+	width, height := len(b), len(b[0])
+  difficulty := Difficulty{width, height, -1}
+	game := &Game{difficulty, board, Playing}
 	return game
 }
 
