@@ -81,14 +81,14 @@ func (b Cells) CalcNeighbors(y, x int) int {
 	return count
 }
 
-// func (g *Game) OpenCell(x, y int) {
-// 	if g.board[x][y] == Mine {
-// 		g.state = Lose
-// 	}
-//
-// 	// check neighboring cells and set the number for current cell
-// 	// open any neighboring cell if current cell is a zero
-// }
+func (g *Game) OpenCell(x, y int) {
+	if g.board.cells[x][y] == Mine {
+		g.state = Lose
+	}
+
+	// check neighboring cells and set the number for current cell
+	// open any neighboring cell if current cell is a zero
+}
 
 func buildBoolArray(width, height int) [][]bool {
 	ret := make([][]bool, width)
@@ -189,7 +189,7 @@ func NewGame(difficulty Difficulty) *Game {
 }
 
 func NewTestGame(c Cells) *Game {
-	width, height := len(c), len(c[0])
+	height, width := len(c), len(c[0])
 	board := Board{c, BoardParams{width, height, -1}}
 	game := &Game{Custom, board, Playing}
 	return game

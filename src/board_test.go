@@ -7,19 +7,20 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestNewGame(t *testing.T) {
-	mineCount := func(b Board) int {
+func mineCount(b Board) int {
 
-		mineCount := 0
-		for _, row := range b.cells {
-			for _, cell := range row {
-				if cell == Mine {
-					mineCount++
-				}
-			}
-		}
-		return mineCount
-	}
+  mineCount := 0
+  for _, row := range b.cells {
+    for _, cell := range row {
+      if cell == Mine {
+        mineCount++
+      }
+    }
+  }
+  return mineCount
+}
+
+func TestNewGame(t *testing.T) {
 
 	beginnerGame := func() {
 		game := NewGame(Beginner)
@@ -27,31 +28,46 @@ func TestNewGame(t *testing.T) {
 		assert.Equal(t, game.board.params.width, 9)
 		assert.Equal(t, game.board.params.height, 9)
 		assert.Equal(t, game.state, Playing)
-		assert.Equal(t, game.state, Playing)
+		assert.Equal(t, game.difficulty, Beginner)
 		assert.Equal(t, 10, mineCount(game.board))
 	}
 	intermediateGame := func() {
-		game := NewGame(Beginner)
+		game := NewGame(Intermediate)
 
-		assert.Equal(t, game.board.params.width, 9)
-		assert.Equal(t, game.board.params.height, 9)
+		assert.Equal(t, game.board.params.width, 16)
+		assert.Equal(t, game.board.params.height, 16)
 		assert.Equal(t, game.state, Playing)
-		assert.Equal(t, game.state, Playing)
-		assert.Equal(t, 10, mineCount(game.board))
+		assert.Equal(t, game.difficulty, Intermediate)
+		assert.Equal(t, 40, mineCount(game.board))
 	}
 	expertGame := func() {
-		game := NewGame(Beginner)
+		game := NewGame(Expert)
 
-		assert.Equal(t, game.board.params.width, 9)
-		assert.Equal(t, game.board.params.height, 9)
+		assert.Equal(t, game.board.params.width, 30)
+		assert.Equal(t, game.board.params.height, 16)
 		assert.Equal(t, game.state, Playing)
-		assert.Equal(t, game.state, Playing)
-		assert.Equal(t, 10, mineCount(game.board))
+		assert.Equal(t, game.difficulty, Expert)
+		assert.Equal(t, 99, mineCount(game.board))
 	}
 
 	beginnerGame()
   intermediateGame()
   expertGame()
+}
+
+func TestNewTestGame(t *testing.T) {
+  c := Cells{
+		{Closed, Closed, Closed},
+		{Closed, Mine, Closed},
+		{Closed, Closed, Closed},
+		{Closed, Closed, Closed},
+  }
+  game := NewTestGame(c)
+  assert.Equal(t, game.board.params.width, 3)
+  assert.Equal(t, game.board.params.height, 4)
+  assert.Equal(t, game.state, Playing)
+  assert.Equal(t, game.difficulty, Custom)
+  assert.Equal(t, 1, mineCount(game.board))
 }
 
 func TestCalcNeighbors(t *testing.T) {
