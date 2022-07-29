@@ -7,24 +7,52 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-// func TestNewGame(t *testing.T) {
-// 	game := NewGame(Beginner)
-//
-// 	assert.Equal(t, game.difficulty.width, 9)
-// 	assert.Equal(t, game.difficulty.height, 9)
-// 	assert.Equal(t, game.state, Playing)
-// 	assert.Equal(t, game.state, Playing)
-//
-// 	mineCount := 0
-// 	for _, row := range *(game.board) {
-// 		for _, cell := range row {
-// 			if cell == Mine {
-// 				mineCount++
-// 			}
-// 		}
-// 	}
-// 	assert.Equal(t, 9, mineCount)
-// }
+func TestNewGame(t *testing.T) {
+	mineCount := func(b Board) int {
+
+		mineCount := 0
+		for _, row := range b.cells {
+			for _, cell := range row {
+				if cell == Mine {
+					mineCount++
+				}
+			}
+		}
+		return mineCount
+	}
+
+	beginnerGame := func() {
+		game := NewGame(Beginner)
+
+		assert.Equal(t, game.board.params.width, 9)
+		assert.Equal(t, game.board.params.height, 9)
+		assert.Equal(t, game.state, Playing)
+		assert.Equal(t, game.state, Playing)
+		assert.Equal(t, 10, mineCount(game.board))
+	}
+	intermediateGame := func() {
+		game := NewGame(Beginner)
+
+		assert.Equal(t, game.board.params.width, 9)
+		assert.Equal(t, game.board.params.height, 9)
+		assert.Equal(t, game.state, Playing)
+		assert.Equal(t, game.state, Playing)
+		assert.Equal(t, 10, mineCount(game.board))
+	}
+	expertGame := func() {
+		game := NewGame(Beginner)
+
+		assert.Equal(t, game.board.params.width, 9)
+		assert.Equal(t, game.board.params.height, 9)
+		assert.Equal(t, game.state, Playing)
+		assert.Equal(t, game.state, Playing)
+		assert.Equal(t, 10, mineCount(game.board))
+	}
+
+	beginnerGame()
+  intermediateGame()
+  expertGame()
+}
 
 func TestCalcNeighbors(t *testing.T) {
 
@@ -152,7 +180,7 @@ func TestIsDuplicateMineCoord(t *testing.T) {
 // this test is pretty dodgy
 func TestMineCoordinates(t *testing.T) {
 	rand.Seed(69421)
-	difficulty := Difficulty{3, 4, 3}
+	difficulty := BoardParams{3, 4, 3}
 	assert.Equal(t, mineCoordinates(difficulty), [][2]int{{2, 2}, {0, 2}, {2, 3}})
 	assert.Equal(t, mineCoordinates(difficulty), [][2]int{{1, 3}, {1, 2}, {0, 0}})
 	assert.Equal(t, mineCoordinates(difficulty), [][2]int{{2, 1}, {0, 1}, {1, 2}})
@@ -161,16 +189,16 @@ func TestMineCoordinates(t *testing.T) {
 
 func TestIntegrateMines(t *testing.T) {
 	rand.Seed(69421)
-	b := &Cells{
+	cells := Cells{
 		{None, None, None},
 		{None, None, None},
 		{None, None, None},
 		{None, None, None},
 	}
-	difficulty := Difficulty{3, 4, 3}
-	b.IntergrateMines(difficulty)
+	board := Board{cells, BoardParams{3, 4, 3}}
+	board.IntergrateMines()
 
-	assert.Equal(t, *b, Cells{
+	assert.Equal(t, board.cells, Cells{
 		{None, None, None},
 		{None, None, None},
 		{Mine, None, Mine},
@@ -179,12 +207,19 @@ func TestIntegrateMines(t *testing.T) {
 }
 
 func TestCreateBlankBoard(t *testing.T) {
-	difficulty := Difficulty{3, 4, 3}
-	board := *CreateBlankBoard(difficulty)
-	assert.Equal(t, board, Cells{
-		{None, None, None},
-		{None, None, None},
-		{None, None, None},
-		{None, None, None},
+	board := CreateBlankBoard(Beginner)
+	assert.Equal(t, board.cells, Cells{
+		{None, None, None, None, None, None, None, None, None},
+		{None, None, None, None, None, None, None, None, None},
+		{None, None, None, None, None, None, None, None, None},
+		{None, None, None, None, None, None, None, None, None},
+		{None, None, None, None, None, None, None, None, None},
+		{None, None, None, None, None, None, None, None, None},
+		{None, None, None, None, None, None, None, None, None},
+		{None, None, None, None, None, None, None, None, None},
+		{None, None, None, None, None, None, None, None, None},
 	})
+	assert.Equal(t, board.params.height, 9)
+	assert.Equal(t, board.params.width, 9)
+	assert.Equal(t, board.params.mineCount, 10)
 }

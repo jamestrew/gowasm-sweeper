@@ -23,14 +23,17 @@ const (
 	Flagged
 )
 
-type Cells [][]Cell
 
-// TODO: deprecate above type for below struct
-type Board struct {
-	cells     [][]Cell
+type Cells [][]Cell
+type BoardParams struct {
 	width     int
 	height    int
 	mineCount int
+}
+
+type Board struct {
+	cells  Cells
+	params BoardParams
 }
 
 type GameState uint8
@@ -41,25 +44,18 @@ const (
 	Lose
 )
 
-type DifficultyLevel uint8
+type Difficulty uint8
 
 const (
-	Beginner DifficultyLevel = iota
+	Beginner Difficulty = iota
 	Intermediate
 	Expert
 	Custom
 )
 
-// TODO: make this apart of the Board struct (see above)
-type Difficulty struct {
-	width     int
-	height    int
-	mineCount int
-}
-
 type Game struct {
 	difficulty Difficulty
-	board      *Cells
+	board      Board
 	state      GameState
 }
 
@@ -121,13 +117,13 @@ func coordinateArray(count, defaultX, defaultY int) [][2]int {
 	return ret
 }
 
-func mineCoordinates(difficulty Difficulty) [][2]int {
+func mineCoordinates(boardParams BoardParams) [][2]int {
 	mineCount := 0
-	mines := coordinateArray(difficulty.mineCount, -1, -1)
+	mines := coordinateArray(boardParams.mineCount, -1, -1)
 
-	for mineCount < difficulty.mineCount {
-		x := rand.Intn(difficulty.width)
-		y := rand.Intn(difficulty.height)
+	for mineCount < boardParams.mineCount {
+		x := rand.Intn(boardParams.width)
+		y := rand.Intn(boardParams.height)
 		if !isDuplicateMineCoord(x, y, mines) {
 			mines[mineCount] = [2]int{x, y}
 			mineCount++
@@ -137,24 +133,11 @@ func mineCoordinates(difficulty Difficulty) [][2]int {
 	return mines
 }
 
-// TODO: make random and also refactor this. this is dumb
-func generateMines(difficulty Difficulty) [][]bool {
-	ret := buildBoolArray(difficulty.width, difficulty.height)
-	for i := range ret {
-		for j := range ret[i] {
-			if i == j {
-				ret[i][j] = true
-			}
-		}
-	}
-	return ret
-}
-
-func (b *Cells) IntergrateMines(difficulty Difficulty) {
-	mineCoords := mineCoordinates(difficulty)
+func (b Board) IntergrateMines() {
+	mineCoords := mineCoordinates(b.params)
 	for _, coord := range mineCoords {
 		x, y := coord[0], coord[1]
-		(*b)[y][x] = Mine
+		(b.cells)[y][x] = Mine
 	}
 }
 
@@ -163,7 +146,7 @@ func GetCustomBoardParams() (int, int, int) {
 	return 9, 9, 10
 }
 
-func GetBoardParams(level DifficultyLevel) Difficulty {
+func GetBoardParams(level Difficulty) BoardParams {
 	var width, height, mines int
 	switch level {
 	case Beginner:
@@ -175,13 +158,14 @@ func GetBoardParams(level DifficultyLevel) Difficulty {
 	case Custom:
 		width, height, mines = GetCustomBoardParams()
 	}
-	return Difficulty{width, height, mines}
+	return BoardParams{width, height, mines}
 }
 
-func CreateBlankBoard(difficulty Difficulty) *Cells {
-	cells := make(Cells, difficulty.height)
+func CreateBlankBoard(difficulty Difficulty) Board {
+	params := GetBoardParams(difficulty)
+	cells := make(Cells, params.height)
 	for i := range cells {
-		cells[i] = make([]Cell, difficulty.width)
+		cells[i] = make([]Cell, params.width)
 	}
 
 	for _, row := range cells {
@@ -189,49 +173,37 @@ func CreateBlankBoard(difficulty Difficulty) *Cells {
 			row[i] = None
 		}
 	}
-	return &cells
+	return Board{cells, params}
 }
 
-func NewBoard(difficulty Difficulty) *Cells {
+func NewBoard(difficulty Difficulty) Board {
 	cells := CreateBlankBoard(difficulty)
-	cells.IntergrateMines(difficulty)
+	cells.IntergrateMines()
 	return cells
 }
 
-func NewGame(level DifficultyLevel) *Game {
-	difficulty := GetBoardParams(level)
+func NewGame(difficulty Difficulty) *Game {
 	board := NewBoard(difficulty)
 	game := &Game{difficulty, board, Playing}
 	return game
 }
 
-func NewTestGame(c *Cells) *Game {
-	b := *c
-	width, height := len(b), len(b[0])
-	difficulty := Difficulty{width, height, -1}
-	game := &Game{difficulty, c, Playing}
+func NewTestGame(c Cells) *Game {
+	width, height := len(c), len(c[0])
+	board := Board{c, BoardParams{width, height, -1}}
+	game := &Game{Custom, board, Playing}
 	return game
 }
 
 func (g Game) PrintBoard() {
-	board := *(g.board)
-	for i := range board {
-		fmt.Println(board[i])
+	for i := range g.board.cells {
+		fmt.Println(g.board.cells[i])
 	}
 }
 
 func main() {
 	fmt.Println("hello world!")
+	rand.Seed(time.Now().UnixNano())
 	game := NewGame(Beginner)
 	game.PrintBoard()
-	fmt.Println(game.board.CalcNeighbors(0, 0))
-
-  b := Board{
-    {Mine, Closed, Mine},
-    {Closed, Closed, Closed},
-    {Mine, Closed, Mine},
-  }
-
-  testGame := NewTestGame(&b)
-  testGame.PrintBoard()
 }
