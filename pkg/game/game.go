@@ -1,6 +1,9 @@
 package game
 
 import (
+	"errors"
+	"fmt"
+
 	"github.com/jamestrew/gowasm-sweeper/pkg/utils"
 )
 
@@ -22,6 +25,9 @@ type Game struct {
 	Open       [][]bool
 	Flagged    [][]bool
 }
+
+type Pos struct {
+	X, Y int
 }
 
 var CustomWidth int = 4
@@ -50,7 +56,7 @@ func GetBoardParams(level DifficultyLevel) (int, int, int) {
 
 func NewGame(difficulty DifficultyLevel) (*Game, error) {
 	width, height, mineCount := GetBoardParams(difficulty)
-	if mineCount > width * height {
+	if mineCount > width*height {
 		errMsg := fmt.Sprintf("Mine count (%d) too large for given board dimensions (%dx%d)", mineCount, width, height)
 		return nil, errors.New(errMsg)
 	}
@@ -60,4 +66,44 @@ func NewGame(difficulty DifficultyLevel) (*Game, error) {
 	flagged := utils.InitBlankMatrix[bool](width, height)
 	return &Game{width, height, mineCount, difficulty, mines, open, flagged}, nil
 }
+
+func (g *Game) CalcAllNeighbors() {
+	for i, row := range g.Mines {
+		for j, cell := range row {
+			if cell != 9 {
+				row[j] = g.CalcCellNeighbors(j, i)
+			}
+		}
+	}
+
+}
+
+func (g *Game) CalcCellNeighbors(x, y int) int {
+	dxs := [3]int{-1, 0, 1}
+	dys := [3]int{0, 1, -1}
+
+	isOutOfBounds := func(dx, dy int) bool {
+		return x+dx >= g.Width || x+dx < 0 || y+dy >= g.Height || y+dy < 0
+	}
+
+	count := 0
+	for _, dx := range dxs {
+		for _, dy := range dys {
+			if isOutOfBounds(dx, dy) || (dx == 0 && dy == 0) {
+				continue
+			}
+			if g.Mines[y+dy][x+dx] == 9 {
+				count++
+			}
+		}
+	}
+
+	return count
+}
+
+func (g *Game) FillMines() {
+	minePositions := createMinePositions(g)
+	for _, pos := range minePositions {
+		g.Mines[pos.Y][pos.X] = 9 // itself a mine
+	}
 }

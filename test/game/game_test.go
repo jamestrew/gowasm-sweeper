@@ -1,7 +1,7 @@
 package game_test
 
 import (
-	"github.com/stretchr/testify/assert"
+	"math/rand"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -104,4 +104,75 @@ func TestGetBoardParams(t *testing.T) {
 	intermediate()
 	expert()
 	custom()
+}
+
+func TestGenerateMines(t *testing.T) {
+	rand.Seed(69420)
+	g.CustomWidth = 4
+	g.CustomHeight = 3
+	g.CustomMineCount = 4
+
+	game, _ := g.NewGame(g.Custom)
+	game.FillMines()
+
+	expected := [][]int{
+		{0, 0, 0, 9},
+		{9, 9, 0, 0},
+		{0, 0, 9, 0},
+	}
+
+	assert.Equal(t, expected, game.Mines)
+}
+
+func TestCalcAllNeighbors(t *testing.T) {
+  customGame := func() {
+    g.CustomWidth = 4
+    g.CustomHeight = 3
+    g.CustomMineCount = 4
+
+    game, _ := g.NewGame(g.Custom)
+    game.Mines = [][]int{
+      {0, 0, 0, 9},
+      {9, 9, 0, 0},
+      {0, 0, 9, 0},
+    }
+    expected := [][]int{
+      {2, 2, 2, 9},
+      {9, 9, 3, 2},
+      {2, 3, 9, 1},
+    }
+    game.CalcAllNeighbors()
+    assert.Equal(t, expected, game.Mines)
+  }
+
+  beginnerGame := func() {
+    game, _ := g.NewGame(g.Beginner)
+    game.Mines = [][]int{
+      {0, 0, 0, 0, 0, 0, 0, 9, 0},
+      {0, 0, 9, 0, 0, 9, 0, 0, 0},
+      {0, 0, 0, 9, 0, 9, 0, 0, 0},
+      {0, 0, 0, 0, 0, 9, 0, 0, 0},
+      {0, 9, 0, 0, 0, 0, 9, 0, 0},
+      {0, 9, 0, 0, 0, 0, 0, 0, 0},
+      {0, 0, 0, 0, 0, 0, 0, 0, 0},
+      {0, 0, 0, 0, 0, 0, 0, 0, 0},
+      {0, 0, 0, 0, 0, 0, 0, 9, 0},
+    }
+    expected := [][]int{
+      {0, 1, 1, 1, 1, 1, 2, 9, 1},
+      {0, 1, 9, 2, 3, 9, 3, 1, 1},
+      {0, 1, 2, 9, 4, 9, 3, 0, 0},
+      {1, 1, 2, 1, 3, 9, 3, 1, 0},
+      {2, 9, 2, 0, 1, 2, 9, 1, 0},
+      {2, 9, 2, 0, 0, 1, 1, 1, 0},
+      {1, 1, 1, 0, 0, 0, 0, 0, 0},
+      {0, 0, 0, 0, 0, 0, 1, 1, 1},
+      {0, 0, 0, 0, 0, 0, 1, 9, 1},
+    }
+    game.CalcAllNeighbors()
+    assert.Equal(t, expected, game.Mines)
+  }
+
+  customGame()
+  beginnerGame()
 }
