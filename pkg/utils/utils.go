@@ -1,7 +1,7 @@
 package utils
 
 
-func InitMatrix[T any](width, height int) [][]T {
+func InitBlankMatrix[T any](width, height int) [][]T {
   ret := make([][]T, height)
   for i := range ret {
     ret[i] = make([]T, width)
@@ -19,6 +19,6 @@ func FillMatrix[T any](matrix [][]T, fillValue T) [][]T {
 }
 
 func InitFilledMatrix[T any](width, height int, fillValue T) [][]T {
-  matrix := InitMatrix[T](width, height)
+  matrix := InitBlankMatrix[T](width, height)
   return FillMatrix(matrix, fillValue)
 }

@@ -15,7 +15,7 @@ func TestInitMatrix(t *testing.T) {
 			{0, 0, 0},
 			{0, 0, 0},
 		}
-		assert.Equal(t, expected, u.InitMatrix[int](3, 4))
+		assert.Equal(t, expected, u.InitBlankMatrix[int](3, 4))
 	}
 
 	boolMatrix := func() {
@@ -25,7 +25,7 @@ func TestInitMatrix(t *testing.T) {
 			{false, false, false},
 			{false, false, false},
 		}
-		assert.Equal(t, expected, u.InitMatrix[bool](3, 4))
+		assert.Equal(t, expected, u.InitBlankMatrix[bool](3, 4))
 	}
 
 	intMatrix()
