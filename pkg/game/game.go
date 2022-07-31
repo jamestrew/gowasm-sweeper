@@ -18,14 +18,19 @@ type Game struct {
 	Height     int
 	MineCount  int
 	Difficulty DifficultyLevel
-	mines      [][]int
-	open       [][]bool
-	flagged    [][]bool
+	Mines      [][]int
+	Open       [][]bool
+	Flagged    [][]bool
 }
+}
+
+var CustomWidth int = 4
+var CustomHeight int = 3
+var CustomMineCount int = 3
 
 // TODO
 func GetCustomBoardParams() (int, int, int) {
-	return 9, 9, 10
+	return CustomWidth, CustomHeight, CustomMineCount
 }
 
 func GetBoardParams(level DifficultyLevel) (int, int, int) {
@@ -43,10 +48,16 @@ func GetBoardParams(level DifficultyLevel) (int, int, int) {
 	return width, height, mines
 }
 
-func NewGame(difficulty DifficultyLevel) *Game {
+func NewGame(difficulty DifficultyLevel) (*Game, error) {
 	width, height, mineCount := GetBoardParams(difficulty)
-	mines := utils.InitMatrix[int](width, height)
-	open := utils.InitMatrix[bool](width, height)
-	flagged := utils.InitMatrix[bool](width, height)
-	return &Game{width, height, mineCount, difficulty, mines, open, flagged}
+	if mineCount > width * height {
+		errMsg := fmt.Sprintf("Mine count (%d) too large for given board dimensions (%dx%d)", mineCount, width, height)
+		return nil, errors.New(errMsg)
+	}
+
+	mines := utils.InitBlankMatrix[int](width, height)
+	open := utils.InitBlankMatrix[bool](width, height)
+	flagged := utils.InitBlankMatrix[bool](width, height)
+	return &Game{width, height, mineCount, difficulty, mines, open, flagged}, nil
+}
 }
