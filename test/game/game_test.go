@@ -1,7 +1,6 @@
 package game_test
 
 import (
-	"fmt"
 	"math/rand"
 	"testing"
 
@@ -73,44 +72,6 @@ func TestNewGame(t *testing.T) {
 	customTooManyMines()
 }
 
-func TestGetBoardParams(t *testing.T) {
-	beginner := func() {
-		width, height, mines := g.GetBoardParams(g.Beginner)
-		assert.Equal(t, 9, width)
-		assert.Equal(t, 9, height)
-		assert.Equal(t, 10, mines)
-	}
-
-	intermediate := func() {
-		width, height, mines := g.GetBoardParams(g.Intermediate)
-		assert.Equal(t, 16, width)
-		assert.Equal(t, 16, height)
-		assert.Equal(t, 40, mines)
-	}
-
-	expert := func() {
-		width, height, mines := g.GetBoardParams(g.Expert)
-		assert.Equal(t, 30, width)
-		assert.Equal(t, 16, height)
-		assert.Equal(t, 99, mines)
-	}
-
-	custom := func() {
-		g.CustomWidth = 420
-		g.CustomHeight = 69
-		g.CustomMineCount = 69
-		width, height, mines := g.GetBoardParams(g.Custom)
-		assert.Equal(t, 420, width)
-		assert.Equal(t, 69, height)
-		assert.Equal(t, 69, mines)
-	}
-
-	beginner()
-	intermediate()
-	expert()
-	custom()
-}
-
 func TestGenerateMines(t *testing.T) {
 	rand.Seed(69420)
 	g.CustomWidth = 4
@@ -180,117 +141,6 @@ func TestCalcAllNeighbors(t *testing.T) {
 
 	customGame()
 	beginnerGame()
-}
-
-func TestOpenCell(t *testing.T) {
-	mines := [][]int{
-		{0, 1, 1, 1, 1, 1, 2, 9, 1},
-		{0, 1, 9, 2, 3, 9, 3, 1, 1},
-		{0, 1, 2, 9, 4, 9, 3, 0, 0},
-		{1, 1, 2, 1, 3, 9, 3, 1, 0},
-		{2, 9, 2, 0, 1, 2, 9, 1, 0},
-		{2, 9, 2, 0, 0, 1, 1, 1, 0},
-		{1, 1, 1, 0, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0, 0, 1, 1, 1},
-		{0, 0, 0, 0, 0, 0, 1, 9, 1},
-	}
-
-	gameOver := func() {
-		game, _ := g.NewGame(g.Beginner)
-		game.Mines = mines
-		x, y := 7, 0
-		open := [][]bool{
-			{false, false, false, false, false, false, false, true, false},
-			{false, false, false, false, false, false, false, false, false},
-			{false, false, false, false, false, false, false, false, false},
-			{false, false, false, false, false, false, false, false, false},
-			{false, false, false, false, false, false, false, false, false},
-			{false, false, false, false, false, false, false, false, false},
-			{false, false, false, false, false, false, false, false, false},
-			{false, false, false, false, false, false, false, false, false},
-			{false, false, false, false, false, false, false, false, false},
-		}
-		game.OpenCell(x, y)
-		assert.Equal(t, g.Lose, game.State)
-		assert.Equal(t, open, game.Open)
-	}
-
-	smallOpen := func() {
-		game, _ := g.NewGame(g.Beginner)
-		game.Mines = mines
-		x, y := 0, 4
-		open := [][]bool{
-			{false, false, false, false, false, false, false, false, false},
-			{false, false, false, false, false, false, false, false, false},
-			{false, false, false, false, false, false, false, false, false},
-			{false, false, false, false, false, false, false, false, false},
-			{true, false, false, false, false, false, false, false, false},
-			{false, false, false, false, false, false, false, false, false},
-			{false, false, false, false, false, false, false, false, false},
-			{false, false, false, false, false, false, false, false, false},
-			{false, false, false, false, false, false, false, false, false},
-		}
-		game.OpenCell(x, y)
-		assert.Equal(t, g.Playing, game.State)
-		assert.Equal(t, open, game.Open)
-	}
-
-	bigOpen := func() {
-		game, _ := g.NewGame(g.Beginner)
-		game.Mines = mines
-		x, y := 3, 7
-		open := [][]bool{
-			{false, false, false, false, false, false, false, false, false},
-			{false, false, false, false, false, false, false, false, false},
-			{false, false, false, false, false, false, false, true, true},
-			{false, false, false, false, false, false, false, false, true},
-			{false, false, false, true, false, false, false, false, true},
-			{false, false, false, true, true, false, false, false, true},
-			{false, false, false, true, true, true, true, true, true},
-			{true, true, true, true, true, true, false, false, false},
-			{true, true, true, true, true, true, false, false, false},
-		}
-
-		game.OpenCell(x, y)
-		assert.Equal(t, 0, game.Mines[y][x])
-		assert.Equal(t, g.Playing, game.State)
-		assert.Equal(t, open, game.Open)
-		fmt.Println(game.Open)
-	}
-
-	onFlag := func() {
-		game, _ := g.NewGame(g.Beginner)
-		open := [][]bool{
-			{false, false, false, false, false, false, false, false, false},
-			{false, false, false, false, false, false, false, false, false},
-			{false, false, false, false, false, false, false, false, false},
-			{false, false, false, false, false, false, false, false, false},
-			{false, false, false, false, false, false, false, false, false},
-			{false, false, false, false, false, false, false, false, false},
-			{false, false, false, false, false, false, false, false, false},
-			{false, false, false, false, false, false, false, false, false},
-			{false, false, false, false, false, false, false, false, false},
-		}
-		flagged := [][]bool{
-			{true, false, false, false, false, false, false, false, false},
-			{false, false, false, false, false, false, false, false, false},
-			{false, false, false, false, false, false, false, false, false},
-			{false, false, false, false, false, false, false, false, false},
-			{false, false, false, false, false, false, false, false, false},
-			{false, false, false, false, false, false, false, false, false},
-			{false, false, false, false, false, false, false, false, false},
-			{false, false, false, false, false, false, false, false, false},
-			{false, false, false, false, false, false, false, false, false},
-		}
-		game.Flagged = flagged
-		game.OpenCell(0, 0)
-		assert.Equal(t, open, game.Open)
-	}
-
-	gameOver()
-	smallOpen()
-	bigOpen()
-	onFlag()
 }
 
 func TestCountBlankNeighbors(t *testing.T) {

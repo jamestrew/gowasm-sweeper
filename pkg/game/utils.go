@@ -54,3 +54,23 @@ func (g *Game) cellNeighbors(x, y int) []Pos {
 	}
 	return positions
 }
+
+// TODO
+func GetCustomBoardParams() (int, int, int) {
+	return CustomWidth, CustomHeight, CustomMineCount
+}
+
+func GetBoardParams(level DifficultyLevel) (int, int, int) {
+	var width, height, mines int
+	switch level {
+	case Beginner:
+		width, height, mines = 9, 9, 10
+	case Intermediate:
+		width, height, mines = 16, 16, 40
+	case Expert:
+		width, height, mines = 30, 16, 99
+	case Custom:
+		width, height, mines = GetCustomBoardParams()
+	}
+	return width, height, mines
+}

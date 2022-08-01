@@ -97,3 +97,41 @@ func TestCellNeighbors(t *testing.T) {
 	topEdge()
 	corner()
 }
+
+func TestGetBoardParams(t *testing.T) {
+	beginner := func() {
+		width, height, mines := g.GetBoardParams(g.Beginner)
+		assert.Equal(t, 9, width)
+		assert.Equal(t, 9, height)
+		assert.Equal(t, 10, mines)
+	}
+
+	intermediate := func() {
+		width, height, mines := g.GetBoardParams(g.Intermediate)
+		assert.Equal(t, 16, width)
+		assert.Equal(t, 16, height)
+		assert.Equal(t, 40, mines)
+	}
+
+	expert := func() {
+		width, height, mines := g.GetBoardParams(g.Expert)
+		assert.Equal(t, 30, width)
+		assert.Equal(t, 16, height)
+		assert.Equal(t, 99, mines)
+	}
+
+	custom := func() {
+		g.CustomWidth = 420
+		g.CustomHeight = 69
+		g.CustomMineCount = 69
+		width, height, mines := g.GetBoardParams(g.Custom)
+		assert.Equal(t, 420, width)
+		assert.Equal(t, 69, height)
+		assert.Equal(t, 69, mines)
+	}
+
+	beginner()
+	intermediate()
+	expert()
+	custom()
+}
