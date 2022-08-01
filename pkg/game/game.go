@@ -85,10 +85,17 @@ func (g *Game) CalcAllNeighbors() {
 			}
 		}
 	}
-
 }
 
 func (g *Game) CalcCellNeighbors(x, y int) int {
+	count := 0
+  for _, pos := range g.cellNeighbors(x, y) {
+    if g.Mines[pos.Y][pos.X] == 9 {
+      count++
+    }
+  }
+	return count
+}
 	dxs := [3]int{-1, 0, 1}
 	dys := [3]int{0, 1, -1}
 
