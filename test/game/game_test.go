@@ -1,6 +1,7 @@
 package game_test
 
 import (
+	"fmt"
 	"math/rand"
 	"testing"
 
@@ -180,4 +181,160 @@ func TestCalcAllNeighbors(t *testing.T) {
 	customGame()
 	beginnerGame()
 }
+
+func TestOpenCell(t *testing.T) {
+	mines := [][]int{
+		{0, 1, 1, 1, 1, 1, 2, 9, 1},
+		{0, 1, 9, 2, 3, 9, 3, 1, 1},
+		{0, 1, 2, 9, 4, 9, 3, 0, 0},
+		{1, 1, 2, 1, 3, 9, 3, 1, 0},
+		{2, 9, 2, 0, 1, 2, 9, 1, 0},
+		{2, 9, 2, 0, 0, 1, 1, 1, 0},
+		{1, 1, 1, 0, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 0, 0, 1, 1, 1},
+		{0, 0, 0, 0, 0, 0, 1, 9, 1},
+	}
+
+	gameOver := func() {
+		game, _ := g.NewGame(g.Beginner)
+		game.Mines = mines
+		x, y := 7, 0
+		open := [][]bool{
+			{false, false, false, false, false, false, false, true, false},
+			{false, false, false, false, false, false, false, false, false},
+			{false, false, false, false, false, false, false, false, false},
+			{false, false, false, false, false, false, false, false, false},
+			{false, false, false, false, false, false, false, false, false},
+			{false, false, false, false, false, false, false, false, false},
+			{false, false, false, false, false, false, false, false, false},
+			{false, false, false, false, false, false, false, false, false},
+			{false, false, false, false, false, false, false, false, false},
+		}
+		game.OpenCell(x, y)
+		assert.Equal(t, g.Lose, game.State)
+		assert.Equal(t, open, game.Open)
+	}
+
+	smallOpen := func() {
+		game, _ := g.NewGame(g.Beginner)
+		game.Mines = mines
+		x, y := 0, 4
+		open := [][]bool{
+			{false, false, false, false, false, false, false, false, false},
+			{false, false, false, false, false, false, false, false, false},
+			{false, false, false, false, false, false, false, false, false},
+			{false, false, false, false, false, false, false, false, false},
+			{true, false, false, false, false, false, false, false, false},
+			{false, false, false, false, false, false, false, false, false},
+			{false, false, false, false, false, false, false, false, false},
+			{false, false, false, false, false, false, false, false, false},
+			{false, false, false, false, false, false, false, false, false},
+		}
+		game.OpenCell(x, y)
+		assert.Equal(t, g.Playing, game.State)
+		assert.Equal(t, open, game.Open)
+	}
+
+	bigOpen := func() {
+		game, _ := g.NewGame(g.Beginner)
+		game.Mines = mines
+		x, y := 3, 7
+		open := [][]bool{
+			{false, false, false, false, false, false, false, false, false},
+			{false, false, false, false, false, false, false, false, false},
+			{false, false, false, false, false, false, false, true, true},
+			{false, false, false, false, false, false, false, false, true},
+			{false, false, false, true, false, false, false, false, true},
+			{false, false, false, true, true, false, false, false, true},
+			{false, false, false, true, true, true, true, true, true},
+			{true, true, true, true, true, true, false, false, false},
+			{true, true, true, true, true, true, false, false, false},
+		}
+
+		game.OpenCell(x, y)
+		assert.Equal(t, 0, game.Mines[y][x])
+		assert.Equal(t, g.Playing, game.State)
+		assert.Equal(t, open, game.Open)
+		fmt.Println(game.Open)
+	}
+
+	gameOver()
+	smallOpen()
+	bigOpen()
+}
+
+func TestCountBlankNeighbors(t *testing.T) {
+	g.CustomHeight = 3
+	g.CustomWidth = 4
+	g.CustomMineCount = 1
+
+	noBlankNeighbors := func() {
+		game, _ := g.NewGame(g.Custom)
+		mines := [][]int{
+			{9, 1, 9, 1},
+			{1, 1, 1, 1},
+			{0, 1, 9, 1},
+		}
+		game.Mines = mines
+		assert.Equal(t, 0, game.CountBlankNeighbors(0, 2))
+	}
+
+	hasBlankNeighbors := func() {
+		game, _ := g.NewGame(g.Custom)
+		mines := [][]int{
+			{0, 1, 9, 1},
+			{0, 1, 1, 1},
+			{0, 1, 9, 1},
+		}
+		game.Mines = mines
+		assert.Equal(t, 1, game.CountBlankNeighbors(0, 0))
+		assert.Equal(t, 2, game.CountBlankNeighbors(0, 1))
+		assert.Equal(t, 1, game.CountBlankNeighbors(0, 2))
+	}
+
+	noBlankNeighbors()
+	hasBlankNeighbors()
+}
+
+func TestOpenBlankCells(t *testing.T) {
+	g.CustomHeight = 3
+	g.CustomWidth = 4
+	g.CustomMineCount = 1
+
+	noBlankNeighbors := func() {
+		game, _ := g.NewGame(g.Custom)
+		mines := [][]int{
+			{9, 1, 9, 1},
+			{1, 1, 1, 1},
+			{0, 1, 9, 1},
+		}
+		open := [][]bool{
+			{false, false, false, false},
+			{false, false, false, false},
+			{false, false, false, false},
+		}
+		game.Mines = mines
+		game.OpenBlankCells(0, 2)
+		assert.Equal(t, open, game.Open)
+	}
+
+	hasBlankNeighbors := func() {
+		game, _ := g.NewGame(g.Custom)
+		mines := [][]int{
+			{0, 1, 9, 1},
+			{0, 1, 1, 1},
+			{0, 1, 9, 1},
+		}
+		open := [][]bool{
+			{true, false, false, false},
+			{true, false, false, false},
+			{true, false, false, false},
+		}
+		game.Mines = mines
+		game.OpenBlankCells(0, 2)
+		assert.Equal(t, open, game.Open)
+	}
+
+	noBlankNeighbors()
+	hasBlankNeighbors()
 }

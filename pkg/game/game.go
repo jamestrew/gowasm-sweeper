@@ -104,31 +104,36 @@ func (g *Game) FillMines() {
 	}
 }
 
-	dxs := [3]int{-1, 0, 1}
-	dys := [3]int{0, 1, -1}
-
-	isOutOfBounds := func(dx, dy int) bool {
-		return x+dx >= g.Width || x+dx < 0 || y+dy >= g.Height || y+dy < 0
-	}
-
+func (g *Game) CountBlankNeighbors(x, y int) int {
 	count := 0
-	for _, dx := range dxs {
-		for _, dy := range dys {
-			if isOutOfBounds(dx, dy) || (dx == 0 && dy == 0) {
-				continue
-			}
-			if g.Mines[y+dy][x+dx] == 9 {
-				count++
-			}
+	for _, pos := range g.cellNeighbors(x, y) {
+		if g.Mines[pos.Y][pos.X] == 0 {
+			count++
 		}
 	}
-
 	return count
 }
 
-func (g *Game) FillMines() {
-	minePositions := createMinePositions(g)
-	for _, pos := range minePositions {
-		g.Mines[pos.Y][pos.X] = 9 // itself a mine
+func (g *Game) OpenBlankCells(x, y int) {
+	if g.CountBlankNeighbors(x, y) == 0 || g.Open[y][x] == true {
+		return
 	}
+
+	g.Open[y][x] = true
+	for _, pos := range g.cellNeighbors(x, y) {
+		if g.Mines[pos.Y][pos.X] == 0 {
+			g.OpenBlankCells(pos.X, pos.Y)
+		}
+	}
+}
+
+func (g *Game) OpenCell(x, y int) {
+	if g.Mines[y][x] == 9 {
+		g.State = Lose
+	}
+
+	if g.Mines[y][x] == 0 {
+		g.OpenBlankCells(x, y)
+	}
+	g.Open[y][x] = true
 }
