@@ -368,3 +368,24 @@ func TestOpenBlankCells(t *testing.T) {
 	noBlankNeighbors()
 	hasBlankNeighbors()
 }
+
+func TestFlagCell(t *testing.T) {
+	g.CustomHeight = 3
+	g.CustomWidth = 4
+	g.CustomMineCount = 1
+
+	game, _ := g.NewGame(g.Custom)
+	game.Open = [][]bool{
+		{true, false, false, false},
+		{true, false, false, false},
+		{true, false, false, false},
+	}
+	game.FlagCell(0, 0)
+	game.FlagCell(1, 0)
+	flagged := [][]bool{
+		{false, true, false, false},
+		{false, false, false, false},
+		{false, false, false, false},
+	}
+	assert.Equal(t, flagged, game.Flagged)
+}

@@ -140,3 +140,9 @@ func (g *Game) OpenCell(x, y int) {
 	}
 	g.Open[y][x] = true
 }
+
+func (g *Game) FlagCell(x, y int) {
+	if !g.Open[y][x] {
+		g.Flagged[y][x] = true
+	}
+}
