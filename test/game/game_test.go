@@ -129,54 +129,55 @@ func TestGenerateMines(t *testing.T) {
 }
 
 func TestCalcAllNeighbors(t *testing.T) {
-  customGame := func() {
-    g.CustomWidth = 4
-    g.CustomHeight = 3
-    g.CustomMineCount = 4
+	customGame := func() {
+		g.CustomWidth = 4
+		g.CustomHeight = 3
+		g.CustomMineCount = 4
 
-    game, _ := g.NewGame(g.Custom)
-    game.Mines = [][]int{
-      {0, 0, 0, 9},
-      {9, 9, 0, 0},
-      {0, 0, 9, 0},
-    }
-    expected := [][]int{
-      {2, 2, 2, 9},
-      {9, 9, 3, 2},
-      {2, 3, 9, 1},
-    }
-    game.CalcAllNeighbors()
-    assert.Equal(t, expected, game.Mines)
-  }
+		game, _ := g.NewGame(g.Custom)
+		game.Mines = [][]int{
+			{0, 0, 0, 9},
+			{9, 9, 0, 0},
+			{0, 0, 9, 0},
+		}
+		expected := [][]int{
+			{2, 2, 2, 9},
+			{9, 9, 3, 2},
+			{2, 3, 9, 1},
+		}
+		game.CalcAllNeighbors()
+		assert.Equal(t, expected, game.Mines)
+	}
 
-  beginnerGame := func() {
-    game, _ := g.NewGame(g.Beginner)
-    game.Mines = [][]int{
-      {0, 0, 0, 0, 0, 0, 0, 9, 0},
-      {0, 0, 9, 0, 0, 9, 0, 0, 0},
-      {0, 0, 0, 9, 0, 9, 0, 0, 0},
-      {0, 0, 0, 0, 0, 9, 0, 0, 0},
-      {0, 9, 0, 0, 0, 0, 9, 0, 0},
-      {0, 9, 0, 0, 0, 0, 0, 0, 0},
-      {0, 0, 0, 0, 0, 0, 0, 0, 0},
-      {0, 0, 0, 0, 0, 0, 0, 0, 0},
-      {0, 0, 0, 0, 0, 0, 0, 9, 0},
-    }
-    expected := [][]int{
-      {0, 1, 1, 1, 1, 1, 2, 9, 1},
-      {0, 1, 9, 2, 3, 9, 3, 1, 1},
-      {0, 1, 2, 9, 4, 9, 3, 0, 0},
-      {1, 1, 2, 1, 3, 9, 3, 1, 0},
-      {2, 9, 2, 0, 1, 2, 9, 1, 0},
-      {2, 9, 2, 0, 0, 1, 1, 1, 0},
-      {1, 1, 1, 0, 0, 0, 0, 0, 0},
-      {0, 0, 0, 0, 0, 0, 1, 1, 1},
-      {0, 0, 0, 0, 0, 0, 1, 9, 1},
-    }
-    game.CalcAllNeighbors()
-    assert.Equal(t, expected, game.Mines)
-  }
+	beginnerGame := func() {
+		game, _ := g.NewGame(g.Beginner)
+		game.Mines = [][]int{
+			{0, 0, 0, 0, 0, 0, 0, 9, 0},
+			{0, 0, 9, 0, 0, 9, 0, 0, 0},
+			{0, 0, 0, 9, 0, 9, 0, 0, 0},
+			{0, 0, 0, 0, 0, 9, 0, 0, 0},
+			{0, 9, 0, 0, 0, 0, 9, 0, 0},
+			{0, 9, 0, 0, 0, 0, 0, 0, 0},
+			{0, 0, 0, 0, 0, 0, 0, 0, 0},
+			{0, 0, 0, 0, 0, 0, 0, 0, 0},
+			{0, 0, 0, 0, 0, 0, 0, 9, 0},
+		}
+		expected := [][]int{
+			{0, 1, 1, 1, 1, 1, 2, 9, 1},
+			{0, 1, 9, 2, 3, 9, 3, 1, 1},
+			{0, 1, 2, 9, 4, 9, 3, 0, 0},
+			{1, 1, 2, 1, 3, 9, 3, 1, 0},
+			{2, 9, 2, 0, 1, 2, 9, 1, 0},
+			{2, 9, 2, 0, 0, 1, 1, 1, 0},
+			{1, 1, 1, 0, 0, 0, 0, 0, 0},
+			{0, 0, 0, 0, 0, 0, 1, 1, 1},
+			{0, 0, 0, 0, 0, 0, 1, 9, 1},
+		}
+		game.CalcAllNeighbors()
+		assert.Equal(t, expected, game.Mines)
+	}
 
-  customGame()
-  beginnerGame()
+	customGame()
+	beginnerGame()
+}
 }
