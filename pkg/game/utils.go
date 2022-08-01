@@ -29,8 +29,28 @@ func createMinePositions(game *Game) []Pos {
 		testPosition := Pos{rand.Intn(game.Width), rand.Intn(game.Height)}
 		if !isDuplicateMinePos(testPosition, mines) {
 			mines[minesCreated] = testPosition
-      minesCreated++
+			minesCreated++
 		}
 	}
 	return mines
+}
+
+func (g *Game) cellNeighbors(x, y int) []Pos {
+	dxs := [3]int{-1, 0, 1}
+	dys := [3]int{0, 1, -1}
+
+	isOutOfBounds := func(dx, dy int) bool {
+		return x+dx >= g.Width || x+dx < 0 || y+dy >= g.Height || y+dy < 0
+	}
+
+	positions := []Pos{}
+	for _, dx := range dxs {
+		for _, dy := range dys {
+			if isOutOfBounds(dx, dy) || (dx == 0 && dy == 0) {
+				continue
+			}
+			positions = append(positions, Pos{x + dx, y + dy})
+		}
+	}
+	return positions
 }
