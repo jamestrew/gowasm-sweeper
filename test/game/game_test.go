@@ -18,6 +18,7 @@ func TestNewGame(t *testing.T) {
 		assert.Equal(t, 9, game.Width)
 		assert.Equal(t, 9, game.Height)
 		assert.Equal(t, 10, game.MineCount)
+		assert.Equal(t, g.Playing, game.State)
 	}
 
 	intermediateGame := func() {
@@ -27,6 +28,7 @@ func TestNewGame(t *testing.T) {
 		assert.Equal(t, 16, game.Width)
 		assert.Equal(t, 16, game.Height)
 		assert.Equal(t, 40, game.MineCount)
+		assert.Equal(t, g.Playing, game.State)
 	}
 
 	expertGame := func() {
@@ -36,6 +38,7 @@ func TestNewGame(t *testing.T) {
 		assert.Equal(t, 30, game.Width)
 		assert.Equal(t, 16, game.Height)
 		assert.Equal(t, 99, game.MineCount)
+		assert.Equal(t, g.Playing, game.State)
 	}
 
 	customGameOk := func() {
@@ -48,6 +51,7 @@ func TestNewGame(t *testing.T) {
 		assert.Equal(t, 420, game.Width)
 		assert.Equal(t, 69, game.Height)
 		assert.Equal(t, 69, game.MineCount)
+		assert.Equal(t, g.Playing, game.State)
 	}
 
 	customTooManyMines := func() {

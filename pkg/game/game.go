@@ -16,6 +16,15 @@ const (
 	Custom
 )
 
+type GameState uint8
+
+const (
+	Unstarted GameState = iota
+	Playing
+	Win
+	Lose
+)
+
 type Game struct {
 	Width      int
 	Height     int
@@ -24,6 +33,7 @@ type Game struct {
 	Mines      [][]int
 	Open       [][]bool
 	Flagged    [][]bool
+	State      GameState
 }
 
 type Pos struct {
@@ -64,7 +74,7 @@ func NewGame(difficulty DifficultyLevel) (*Game, error) {
 	mines := utils.InitBlankMatrix[int](width, height)
 	open := utils.InitBlankMatrix[bool](width, height)
 	flagged := utils.InitBlankMatrix[bool](width, height)
-	return &Game{width, height, mineCount, difficulty, mines, open, flagged}, nil
+	return &Game{width, height, mineCount, difficulty, mines, open, flagged, Playing}, nil
 }
 
 func (g *Game) CalcAllNeighbors() {
