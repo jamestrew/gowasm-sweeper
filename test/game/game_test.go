@@ -258,9 +258,39 @@ func TestOpenCell(t *testing.T) {
 		fmt.Println(game.Open)
 	}
 
+	onFlag := func() {
+		game, _ := g.NewGame(g.Beginner)
+		open := [][]bool{
+			{false, false, false, false, false, false, false, false, false},
+			{false, false, false, false, false, false, false, false, false},
+			{false, false, false, false, false, false, false, false, false},
+			{false, false, false, false, false, false, false, false, false},
+			{false, false, false, false, false, false, false, false, false},
+			{false, false, false, false, false, false, false, false, false},
+			{false, false, false, false, false, false, false, false, false},
+			{false, false, false, false, false, false, false, false, false},
+			{false, false, false, false, false, false, false, false, false},
+		}
+		flagged := [][]bool{
+			{true, false, false, false, false, false, false, false, false},
+			{false, false, false, false, false, false, false, false, false},
+			{false, false, false, false, false, false, false, false, false},
+			{false, false, false, false, false, false, false, false, false},
+			{false, false, false, false, false, false, false, false, false},
+			{false, false, false, false, false, false, false, false, false},
+			{false, false, false, false, false, false, false, false, false},
+			{false, false, false, false, false, false, false, false, false},
+			{false, false, false, false, false, false, false, false, false},
+		}
+		game.Flagged = flagged
+		game.OpenCell(0, 0)
+		assert.Equal(t, open, game.Open)
+	}
+
 	gameOver()
 	smallOpen()
 	bigOpen()
+	onFlag()
 }
 
 func TestCountBlankNeighbors(t *testing.T) {

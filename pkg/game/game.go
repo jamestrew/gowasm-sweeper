@@ -115,7 +115,7 @@ func (g *Game) CountBlankNeighbors(x, y int) int {
 }
 
 func (g *Game) OpenBlankCells(x, y int) {
-	if g.CountBlankNeighbors(x, y) == 0 || g.Open[y][x] == true {
+	if g.CountBlankNeighbors(x, y) == 0 || g.Open[y][x] {
 		return
 	}
 
@@ -128,6 +128,9 @@ func (g *Game) OpenBlankCells(x, y int) {
 }
 
 func (g *Game) OpenCell(x, y int) {
+	if g.Flagged[y][x] {
+		return
+	}
 	if g.Mines[y][x] == 9 {
 		g.State = Lose
 	}
