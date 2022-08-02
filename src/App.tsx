@@ -1,6 +1,6 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import logo from "./logo.svg";
+import "./App.css";
 
 function App() {
   return (
@@ -18,6 +18,13 @@ function App() {
         >
           Learn React
         </a>
+        <button
+          onClick={() => {
+            alert(window.myGolangFunction(2, 3));
+          }}
+        >
+          Click here for Wasm magic
+        </button>
       </header>
     </div>
   );
