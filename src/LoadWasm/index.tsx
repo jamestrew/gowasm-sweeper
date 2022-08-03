@@ -6,7 +6,6 @@ import React, { useEffect, useState } from 'react'
 async function loadWasm(): Promise<void> {
   const goWasm = new window.Go();
   const result = await WebAssembly.instantiateStreaming(fetch('main.wasm'), goWasm.importObject);
-  console.log(result);
   goWasm.run(result.instance)
 }
 
