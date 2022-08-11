@@ -1,8 +1,11 @@
+type board = string;
+
 declare global {
-  export interface Window {
-    Go: any;
-    myGolangFunction: (a: number, b: number) => number;
-  }
+	export interface Window {
+		Go: any;
+		newGame: (difficulty: number) => board;
+		openCell: (x: number, y: number) => board;
+	}
 }
 
-export {};
+export { };
