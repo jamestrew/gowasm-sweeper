@@ -1,6 +1,7 @@
 package game
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 
@@ -105,4 +106,31 @@ func (g *Game) OpenBlankCells(x, y int) {
 			g.OpenBlankCells(pos.X, pos.Y)
 		}
 	}
+}
+
+func (g *Game) AsArray() [][]int {
+	board := utils.InitBlankMatrix[int](g.Width, g.Height)
+
+	for i, row := range board {
+		for j := range row {
+			if g.Open[i][j] {
+				board[i][j] = g.Mines[i][j]
+			} else {
+				board[i][j] = -1
+			}
+
+			if g.Flagged[i][j] {
+				board[i][j] = -2
+			} else if g.State == Lose && g.Mines[i][j] == 9 {
+				board[i][j] = 9
+			}
+		}
+	}
+
+	return board
+}
+
+func (g *Game) AsJson() string {
+	ret, _ := json.Marshal(g.AsArray())
+	return string(ret)
 }

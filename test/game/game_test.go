@@ -239,3 +239,69 @@ func TestFlagCell(t *testing.T) {
 	}
 	assert.Equal(t, flagged, game.Flagged)
 }
+
+func TestAsArray(t *testing.T) {
+	g.CustomWidth = 4
+	g.CustomHeight = 3
+	g.CustomMineCount = 5
+	game, _ := g.NewGame(g.Custom)
+
+	game.Mines = [][]int{
+		{9, 1, 9, 1},
+		{1, 1, 1, 1},
+		{0, 1, 9, 1},
+	}
+
+	veryStart := func() {
+		expected := [][]int{
+			{-1, -1, -1, -1},
+			{-1, -1, -1, -1},
+			{-1, -1, -1, -1},
+		}
+		assert.Equal(t, expected, game.AsArray())
+	}
+
+	openSome := func() {
+		game.Open = [][]bool{
+			{false, false, false, false},
+			{false, false, false, false},
+			{true, false, false, true},
+		}
+		expected := [][]int{
+			{-1, -1, -1, -1},
+			{-1, -1, -1, -1},
+			{0, -1, -1, 1},
+		}
+		assert.Equal(t, expected, game.AsArray())
+	}
+
+	flagOne := func() {
+		game.Flagged = [][]bool{
+			{true, false, false, false},
+			{false, false, false, false},
+			{false, false, false, false},
+		}
+		expected := [][]int{
+			{-2, -1, -1, -1},
+			{-1, -1, -1, -1},
+			{0, -1, -1, 1},
+		}
+		assert.Equal(t, expected, game.AsArray())
+	}
+
+	openMine := func() {
+		game.Open[0][2] = true
+		game.State = g.Lose
+		expected := [][]int{
+			{-2, -1, 9, -1},
+			{-1, -1, -1, -1},
+			{0, -1, 9, 1},
+		}
+		assert.Equal(t, expected, game.AsArray())
+	}
+
+	veryStart()
+	openSome()
+	flagOne()
+	openMine()
+}
