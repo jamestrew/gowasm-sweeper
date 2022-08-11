@@ -239,6 +239,9 @@ const globalThis = window;
           case 'function':
             typeFlag = 4;
             break;
+					case 'number':
+						typeFlag = 0;
+						break;
           default:
             throw new Error(`Unsupported type: ${typeof v}`);
         }
