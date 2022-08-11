@@ -11,8 +11,9 @@ var game *g.Game
 func newGame() js.Func {
 	return js.FuncOf(func(this js.Value, args []js.Value) interface{} {
 		difficulty := g.DifficultyLevel(args[0].Int())
-		// var customHeight = args[1].Int()
-		// var customWidth = args[2].Int()
+		g.CustomWidth = args[1].Int()
+		g.CustomHeight = args[2].Int()
+		g.CustomMineCount = args[3].Int()
 		game, _ = g.NewGame(difficulty)
 		game.FillMines()
 		return game.AsJson()

@@ -3,7 +3,12 @@ type board = string;
 declare global {
 	export interface Window {
 		Go: any;
-		newGame: (difficulty: number) => board;
+		newGame: (
+			difficulty: number,
+			width: number,
+			height: number,
+			mines: number
+		) => board;
 		openCell: (x: number, y: number) => board;
 	}
 }
