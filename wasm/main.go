@@ -31,7 +31,7 @@ func openCell(this js.Value, args []js.Value) interface{} {
 
 func flagCell(this js.Value, args []js.Value) interface{} {
 	x, y := args[0].Int(), args[1].Int()
-	game.FlagCell(x, y)
+	game.ToggleFlag(x, y)
 	return game.AsJson()
 }
 

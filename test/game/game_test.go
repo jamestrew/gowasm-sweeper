@@ -230,8 +230,14 @@ func TestFlagCell(t *testing.T) {
 		{true, false, false, false},
 		{true, false, false, false},
 	}
-	game.FlagCell(0, 0)
-	game.FlagCell(1, 0)
+	game.Flagged = [][]bool{
+		{false, false, false, false},
+		{false, false, false, false},
+		{false, false, false, true},
+	}
+	game.ToggleFlag(0, 0)
+	game.ToggleFlag(1, 0)
+	game.ToggleFlag(3, 2)
 	flagged := [][]bool{
 		{false, true, false, false},
 		{false, false, false, false},

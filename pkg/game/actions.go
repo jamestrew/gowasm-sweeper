@@ -19,9 +19,9 @@ func (g *Game) OpenCell(x, y int) {
 	}
 }
 
-func (g *Game) FlagCell(x, y int) {
+func (g *Game) ToggleFlag(x, y int) {
 	if !g.Open[y][x] {
-		g.Flagged[y][x] = true
+		g.Flagged[y][x] = !g.Flagged[y][x]
 	}
 }
 
