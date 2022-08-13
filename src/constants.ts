@@ -6,3 +6,5 @@ export const DEFAULT_SETTINGS: GameParams = {
 	height: 3,
 	mineCount: 5,
 };
+
+export const CELL_SIZE = 30;

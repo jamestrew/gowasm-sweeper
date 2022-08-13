@@ -1,21 +1,16 @@
 import { useEffect, useState } from "react";
 import "./App.css";
-import { DEFAULT_SETTINGS } from "./constants";
-import { GameState } from './types'
-// import Options from "./components/Options";
 
-import { DEFAULT_SETTINGS } from "./constants";
+import { DEFAULT_SETTINGS, CELL_SIZE } from "./constants";
 import { GameData } from "./types";
 import { boardDimensions, gameObj } from "./utils";
-// import Options from "./components/Options";
+import Cell from './components/Cell'
 
-const CELL_SIZE = 30;
 
 function App() {
   const [game, setGame] = useState<GameData>();
 
   useEffect(() => {
-    console.log("App rendered");
     setGame(gameObj(window.newGame(DEFAULT_SETTINGS)));
   }, []);
 
@@ -58,56 +53,5 @@ function App() {
   );
 }
 
-type CellProps = {
-  x: number;
-  y: number;
-  cellType: number;
-  openCell: () => void;
-};
-
-const Cell = ({ x, y, cellType, openCell }: CellProps) => {
-  let cellIcon: string;
-
-  switch (cellType) {
-    case -1:
-    case 0:
-      cellIcon = "";
-      break;
-    case 1:
-    case 2:
-    case 3:
-    case 4:
-    case 5:
-    case 6:
-    case 7:
-    case 8:
-      cellIcon = cellType.toString();
-      break;
-    case 9:
-      cellIcon = "💣";
-      break;
-    case -2:
-      cellIcon = "🚩";
-      break;
-    default:
-      throw new Error(`undefined cell type ${cellType}`);
-  }
-
-  return (
-    <div
-      className="Cell"
-      style={{
-        width: `${CELL_SIZE - 6}px`,
-        height: `${CELL_SIZE - 6}px`,
-        gridColumnStart: x + 1,
-        gridRowStart: y + 1,
-        background: `${cellType === -1 ? "white" : " #7f8c8d "}`,
-      }}
-      onClick={openCell}
-    >
-      {cellIcon}
-    </div>
-  );
-};
 
 export default App;
