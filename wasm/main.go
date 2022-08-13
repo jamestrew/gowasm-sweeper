@@ -29,8 +29,13 @@ func openCell(this js.Value, args []js.Value) interface{} {
 	return game.AsJson()
 }
 
+func getState(this js.Value, args []js.Value) interface{} {
+	return game.AsJson()
+}
+
 func main() {
 	js.Global().Set("newGame", js.FuncOf(newGame))
 	js.Global().Set("openCell", js.FuncOf(openCell))
+	js.Global().Set("getState", js.FuncOf(getState))
 	<-make(chan bool)
 }

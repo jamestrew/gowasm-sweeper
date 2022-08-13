@@ -5,6 +5,7 @@ declare global {
 		Go: any;
 		newGame: (gameParams: GameParams) => string;
 		openCell: (x: number, y: number) => string;
+		getState: () => string;
 	}
 }
 
