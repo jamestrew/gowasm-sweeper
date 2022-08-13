@@ -305,3 +305,19 @@ func TestAsArray(t *testing.T) {
 	flagOne()
 	openMine()
 }
+
+func TestAsJson(t *testing.T) {
+	g.CustomWidth = 4
+	g.CustomHeight = 3
+	g.CustomMineCount = 5
+	game, _ := g.NewGame(g.Custom)
+
+	game.Mines = [][]int{
+		{9, 1, 9, 1},
+		{1, 1, 1, 1},
+		{0, 1, 9, 1},
+	}
+
+	expected := "{\"State\":1,\"Board\":[[-1,-1,-1,-1],[-1,-1,-1,-1],[-1,-1,-1,-1]]}"
+	assert.Equal(t, expected, game.AsJson())
+}

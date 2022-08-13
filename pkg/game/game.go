@@ -131,6 +131,15 @@ func (g *Game) AsArray() [][]int {
 }
 
 func (g *Game) AsJson() string {
-	ret, _ := json.Marshal(g.AsArray())
+	type gameData struct {
+		State GameState
+		Board [][]int
+	}
+
+	data := &gameData{ g.State, g.AsArray() }
+	ret, err := json.Marshal(data)
+	if err != nil {
+		panic(err)
+	}
 	return string(ret)
 }
