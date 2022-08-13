@@ -1,17 +1,23 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 
 import { DEFAULT_SETTINGS } from "./constants";
+import { GameData } from "./types";
+import { boardDimensions, gameObj } from "./utils";
+// import Options from "./components/Options";
 
 const CELL_SIZE = 30;
 
 function App() {
-  const [board, setBoard] = useState<number[][]>(
-    JSON.parse(window.newGame(DEFAULT_SETTINGS))
-  );
+  const [game, setGame] = useState<GameData>();
 
-  const width = board[0]?.length ?? 0;
-  const height = board.length;
+  useEffect(() => {
+    console.log("App rendered");
+    setGame(gameObj(window.newGame(DEFAULT_SETTINGS)));
+  }, []);
+
+  const { width, height } = boardDimensions(game);
+  const board = game?.board;
 
   const boardWidth = `${CELL_SIZE * width}px`;
   const boardHeight = `${CELL_SIZE * height}px`;
@@ -20,26 +26,31 @@ function App() {
     <div className="App">
       <button
         onClick={() =>
-          setBoard(
-            JSON.parse(window.newGame({ ...DEFAULT_SETTINGS, difficulty: 3 }))
+          setGame(
+            gameObj(window.newGame({ ...DEFAULT_SETTINGS, difficulty: 3 }))
           )
         }
       >
         New Game
       </button>
-      <div className="Board" style={{ width: boardWidth, height: boardHeight }}>
-        {board.map((row, i) =>
-          row.map((_, j) => (
-            <Cell
-              x={j}
-              y={i}
-              key={i * width + j}
-              cellType={board[i][j]}
-              openCell={() => setBoard(JSON.parse(window.openCell(j, i)))}
-            />
-          ))
-        )}
-      </div>
+      {board && (
+        <div
+          className="Board"
+          style={{ width: boardWidth, height: boardHeight }}
+        >
+          {board.map((row, i) =>
+            row.map((_, j) => (
+              <Cell
+                x={j}
+                y={i}
+                key={i * width + j}
+                cellType={board[i][j]}
+                openCell={() => setGame(gameObj(window.openCell(j, i)))}
+              />
+            ))
+          )}
+        </div>
+      )}
     </div>
   );
 }
