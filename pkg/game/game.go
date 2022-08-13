@@ -95,6 +95,22 @@ func (g *Game) CountBlankNeighbors(x, y int) int {
 	return count
 }
 
+func (g *Game) openNeighbors(x, y int) {
+	for _, pos := range g.cellNeighbors(x, y) {
+		g.Open[pos.Y][pos.X] = true
+	}
+}
+
+func (g *Game) OpenBlankNeighbors() {
+	for i, row := range g.Open {
+		for j, cell := range row {
+			if cell && g.Mines[i][j] == 0 {
+				g.openNeighbors(j, i)
+			}
+		}
+	}
+}
+
 func (g *Game) OpenBlankCells(x, y int) {
 	if g.CountBlankNeighbors(x, y) == 0 || g.Open[y][x] {
 		return

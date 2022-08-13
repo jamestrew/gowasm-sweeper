@@ -13,6 +13,7 @@ func (g *Game) OpenCell(x, y int) {
 		g.OpenBlankCells(x, y)
 	}
 	g.Open[y][x] = true
+	g.OpenBlankNeighbors()
 }
 
 func (g *Game) FlagCell(x, y int) {
