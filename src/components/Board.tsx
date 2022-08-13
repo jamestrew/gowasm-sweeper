@@ -25,6 +25,7 @@ const Board = ({ board, setGame }: BoardProps) => {
 						key={i * width + j}
 						cellType={board[i][j]}
 						openCell={() => setGame(gameObj(window.openCell(j, i)))}
+						flagCell={() => setGame(gameObj(window.flagCell(j, i)))}
 					/>
 				))
 			)}

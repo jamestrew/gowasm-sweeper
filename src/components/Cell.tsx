@@ -6,9 +6,36 @@ type CellProps = {
 	y: number;
 	cellType: number;
 	openCell: () => void;
+	flagCell: () => void;
 };
 
-const Cell = ({ x, y, cellType, openCell }: CellProps) => {
+const Cell = ({ x, y, cellType, openCell, flagCell }: CellProps) => {
+	const handleRightClick = (
+		e: React.MouseEvent<HTMLDivElement, MouseEvent>
+	) => {
+		e.preventDefault();
+		flagCell();
+	};
+
+	return (
+		<div
+			className="Cell"
+			style={{
+				width: `${CELL_SIZE - 6}px`,
+				height: `${CELL_SIZE - 6}px`,
+				gridColumnStart: x + 1,
+				gridRowStart: y + 1,
+				background: `${cellType === -1 ? "white" : " #7f8c8d "}`,
+			}}
+			onClick={openCell}
+			onContextMenu={(e) => handleRightClick(e)}
+		>
+			{cellIcon(cellType)}
+		</div>
+	);
+};
+
+const cellIcon = (cellType: number): string => {
 	let cellIcon: string;
 
 	switch (cellType) {
@@ -35,22 +62,7 @@ const Cell = ({ x, y, cellType, openCell }: CellProps) => {
 		default:
 			throw new Error(`undefined cell type ${cellType}`);
 	}
-
-	return (
-		<div
-			className="Cell"
-			style={{
-				width: `${CELL_SIZE - 6}px`,
-				height: `${CELL_SIZE - 6}px`,
-				gridColumnStart: x + 1,
-				gridRowStart: y + 1,
-				background: `${cellType === -1 ? "white" : " #7f8c8d "}`,
-			}}
-			onClick={openCell}
-		>
-			{cellIcon}
-		</div>
-	);
+	return cellIcon;
 };
 
 export default Cell;
