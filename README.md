@@ -3,6 +3,7 @@
 #### TODO
 
 - [x] fix opening of cells (specifically blank cell behavior)
+- [x] win/lose status
 - [ ] add flagging input
 - [ ] add chorded input
 - [ ] UI

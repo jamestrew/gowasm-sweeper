@@ -1,5 +1,5 @@
 export type GameData = {
-  state: number;
+  state: State;
   board: number[][];
 };
 
@@ -9,3 +9,10 @@ export type GameParams = {
   height: number;
   mineCount: number;
 };
+
+export enum State {
+	Unstarted = 0,
+	Playing,
+	Win,
+	Lose
+}

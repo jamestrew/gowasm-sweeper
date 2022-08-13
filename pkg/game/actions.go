@@ -14,6 +14,9 @@ func (g *Game) OpenCell(x, y int) {
 	}
 	g.Open[y][x] = true
 	g.OpenBlankNeighbors()
+	if g.CheckWin() {
+		g.State = Win
+	}
 }
 
 func (g *Game) FlagCell(x, y int) {

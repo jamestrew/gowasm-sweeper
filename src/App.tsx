@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import "./App.css";
 
 import { DEFAULT_SETTINGS } from "./constants";
-import { GameData } from "./types";
+import { GameData, State } from "./types";
 import { gameObj } from "./utils";
 import Board from "./components/Board";
 
@@ -12,6 +12,15 @@ function App() {
 	useEffect(() => {
 		setGame(gameObj(window.newGame(DEFAULT_SETTINGS)));
 	}, []);
+
+	switch (game?.state) {
+		case State.Win:
+			console.log('Winner!');
+			break;
+		case State.Lose:
+			console.log('Loser!');
+			break;
+	}
 
 	return (
 		<div className="App">

@@ -146,6 +146,18 @@ func (g *Game) AsArray() [][]int {
 	return board
 }
 
+func (g *Game) CheckWin() bool {
+	ret := true
+	for i, row := range g.Mines {
+		for j, cell := range row {
+			if (cell != 9 && !g.Open[i][j]) || (cell == 9 && g.Open[i][j]) {
+				ret = false
+			}
+		}
+	}
+	return ret
+}
+
 func (g *Game) AsJson() string {
 	type gameData struct {
 		State GameState

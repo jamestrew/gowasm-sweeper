@@ -322,31 +322,46 @@ func TestAsJson(t *testing.T) {
 	assert.Equal(t, expected, game.AsJson())
 }
 
-func TestFoo(t *testing.T) {
-	game, _ := g.NewGame(g.Beginner)
-	mines := [][]int{
-		{0, 1, 9, 1, 0, 0, 0, 0, 0},
-		{1, 3, 3, 3, 1, 0, 0, 0, 0},
-		{9, 2, 9, 9, 1, 0, 0, 0, 0},
-		{1, 2, 2, 2, 1, 0, 0, 0, 0},
-		{0, 1, 1, 1, 0, 0, 0, 0, 0},
-		{0, 1, 9, 2, 2, 2, 1, 0, 0},
-		{0, 1, 1, 2, 9, 9, 2, 0, 0},
-		{0, 0, 0, 2, 4, 9, 3, 1, 1},
-		{0, 0, 0, 1, 9, 2, 2, 9, 1},
-	}
+func TestCheckWin(t *testing.T) {
+	g.CustomWidth = 4
+	g.CustomHeight = 3
+	g.CustomMineCount = 5
+	game, _ := g.NewGame(g.Custom)
+
 	game.Mines = [][]int{
-		{0, 1, 9, 1, 0, 0, 0, 0, 0},
-		{1, 3, 3, 3, 1, 0, 0, 0, 0},
-		{9, 2, 9, 9, 1, 0, 0, 0, 0},
-		{1, 2, 2, 2, 1, 0, 0, 0, 0},
-		{0, 1, 1, 1, 0, 0, 0, 0, 0},
-		{0, 1, 9, 2, 2, 2, 1, 0, 0},
-		{0, 1, 1, 2, 9, 9, 2, 0, 0},
-		{0, 0, 0, 2, 4, 9, 3, 1, 1},
-		{0, 0, 0, 1, 9, 2, 2, 9, 1},
+		{9, 1, 9, 1},
+		{1, 1, 1, 1},
+		{0, 1, 9, 1},
 	}
 
-	game.OpenCell(0, 0)
-	assert.Equal(t, mines, game.Mines)
+	winner := func() {
+		game.Open = [][]bool{
+			{false, true, false, true},
+			{true, true, true, true},
+			{true, true, false, true},
+		}
+		assert.Equal(t, true, game.CheckWin())
+	}
+
+	notYet := func() {
+		game.Open = [][]bool{
+			{false, true, false, true},
+			{true, true, true, true},
+			{false, true, false, true},
+		}
+		assert.Equal(t, false, game.CheckWin())
+	}
+
+	loser := func() {
+		game.Open = [][]bool{
+			{true, true, false, true},
+			{true, true, true, true},
+			{true, true, false, true},
+		}
+		assert.Equal(t, false, game.CheckWin())
+	}
+
+	winner()
+	notYet()
+	loser()
 }

@@ -140,8 +140,35 @@ func TestOpenCell(t *testing.T) {
 		assert.Equal(t, open, game.Open)
 	}
 
+	winning := func() {
+		g.CustomWidth = 4
+		g.CustomHeight = 3
+		g.CustomMineCount = 5
+		game, _ := g.NewGame(g.Custom)
+
+		game.Mines = [][]int{
+			{9, 1, 9, 1},
+			{1, 1, 1, 1},
+			{0, 1, 9, 1},
+		}
+		game.Open = [][]bool{
+			{false, true, false, true},
+			{true, true, true, true},
+			{false, true, false, true},
+		}
+		expected := [][]bool{
+			{false, true, false, true},
+			{true, true, true, true},
+			{true, true, false, true},
+		}
+		game.OpenCell(0, 2)
+		assert.Equal(t, expected, game.Open)
+		assert.Equal(t, g.Win, game.State)
+	}
+
 	gameOver()
 	smallOpen()
 	bigOpen()
 	onFlag()
+	winning()
 }
