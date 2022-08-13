@@ -1,10 +1,10 @@
-type board = string;
+import { GameParams } from '../types'
 
 declare global {
 	export interface Window {
 		Go: any;
-		newGame: (difficulty: number) => board;
-		openCell: (x: number, y: number) => board;
+		newGame: (gameParams: GameParams) => string;
+		openCell: (x: number, y: number) => string;
 	}
 }
 

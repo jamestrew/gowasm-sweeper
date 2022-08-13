@@ -8,28 +8,29 @@ import (
 
 var game *g.Game
 
-func newGame() js.Func {
-	return js.FuncOf(func(this js.Value, args []js.Value) interface{} {
-		difficulty := g.DifficultyLevel(args[0].Int())
-		// var customHeight = args[1].Int()
-		// var customWidth = args[2].Int()
-		game, _ = g.NewGame(difficulty)
-		game.FillMines()
-		return game.AsJson()
-	})
+func newGame(this js.Value, args []js.Value) interface{} {
+	gameParams := args[0]
+	difficulty := g.DifficultyLevel(gameParams.Get("difficulty").Int())
+	if difficulty == g.Custom {
+		g.CustomWidth = gameParams.Get("width").Int()
+		g.CustomHeight = gameParams.Get("height").Int()
+		g.CustomMineCount = gameParams.Get("mineCount").Int()
+	}
+	game, _ = g.NewGame(difficulty)
+	// TODO: create random seed
+	game.FillMines()
+	game.CalcAllNeighbors()
+	return game.AsJson()
 }
 
-func openCell() js.Func {
-	return js.FuncOf(func(this js.Value, args []js.Value) interface{} {
-		x, y := args[0].Int(), args[1].Int()
-		game.OpenCell(x, y)
-		return game.AsJson()
-	})
+func openCell(this js.Value, args []js.Value) interface{} {
+	x, y := args[0].Int(), args[1].Int()
+	game.OpenCell(x, y)
+	return game.AsJson()
 }
 
 func main() {
-	ch := make(chan struct{}, 0)
-	js.Global().Set("newGame", newGame())
-	js.Global().Set("openCell", openCell())
-	<-ch
+	js.Global().Set("newGame", js.FuncOf(newGame))
+	js.Global().Set("openCell", js.FuncOf(openCell))
+	<-make(chan bool)
 }
