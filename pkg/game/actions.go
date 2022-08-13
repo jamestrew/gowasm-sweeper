@@ -1,5 +1,6 @@
 package game
 
+// FIX: over-opening
 func (g *Game) OpenCell(x, y int) {
 	if g.Flagged[y][x] {
 		return

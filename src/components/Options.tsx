@@ -148,4 +148,3 @@ const Options = ({ onNewGame }: OptionsProps) => {
 };
 
 export default Options;
-

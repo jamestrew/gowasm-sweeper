@@ -1,4 +1,4 @@
-import { GameParams } from './types'
+import { GameParams } from "./types";
 
 export const DEFAULT_SETTINGS: GameParams = {
 	difficulty: 0,

@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
 import "./App.css";
+import { DEFAULT_SETTINGS } from "./constants";
+import { GameState } from './types'
+// import Options from "./components/Options";
 
 import { DEFAULT_SETTINGS } from "./constants";
 import { GameData } from "./types";
