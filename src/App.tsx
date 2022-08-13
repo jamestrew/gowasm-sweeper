@@ -27,20 +27,6 @@ function App() {
 	return (
 		<div className="App">
 			<div className="game">
-				<Options
-					onNewGame={(settings) =>
-						setBoard(
-							JSON.parse(
-								window.newGame(
-									settings.difficulty,
-									settings.width,
-									settings.height,
-									settings.mineCount
-								)
-							)
-						)
-					}
-				/>
 				<div
 					className="Board"
 					style={{ width: boardWidth, height: boardHeight }}
@@ -58,6 +44,20 @@ function App() {
 					)}
 				</div>
 			</div>
+			<Options
+				onNewGame={(settings) =>
+					setBoard(
+						JSON.parse(
+							window.newGame(
+								settings.difficulty,
+								settings.width,
+								settings.height,
+								settings.mineCount
+							)
+						)
+					)
+				}
+			/>
 		</div>
 	);
 }

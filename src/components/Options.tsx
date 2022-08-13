@@ -55,7 +55,7 @@ const Options = ({ onNewGame }: OptionsProps) => {
 
 	// TODO: refactor this to use an array mapping or something less html-y
 	return (
-		<div>
+		<div className="Options">
 			<table>
 				<thead>
 					<tr>
