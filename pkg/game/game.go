@@ -136,7 +136,7 @@ func (g *Game) AsJson() string {
 		Board [][]int
 	}
 
-	data := &gameData{ g.State, g.AsArray() }
+	data := &gameData{g.State, g.AsArray()}
 	ret, err := json.Marshal(data)
 	if err != nil {
 		panic(err)
