@@ -3,6 +3,8 @@ import { GameData } from "../types";
 import { gameObj } from "../utils";
 import Cell from "./Cell";
 
+import '../App.css'
+
 type BoardProps = {
 	board: number[][];
 	setGame: React.Dispatch<GameData>;

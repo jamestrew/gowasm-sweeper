@@ -1,16 +1,10 @@
 import React, { useState } from "react";
 
 import { DEFAULT_SETTINGS } from "../constants";
+import { GameParams } from "../types";
 
 type OptionsProps = {
-	onNewGame: (settings: GameSettings) => void;
-};
-
-type GameSettings = {
-	difficulty: number;
-	width: number;
-	height: number;
-	mineCount: number;
+	onNewGame: (settings: GameParams) => void;
 };
 
 enum BoardParam {
@@ -20,9 +14,9 @@ enum BoardParam {
 }
 
 const Options = ({ onNewGame }: OptionsProps) => {
-	const [settings, setSettings] = useState<GameSettings>(DEFAULT_SETTINGS);
+	const [settings, setSettings] = useState<GameParams>(DEFAULT_SETTINGS);
 
-	const isValidCustomBoard = (settings: GameSettings): boolean => {
+	const isValidCustomBoard = (settings: GameParams): boolean => {
 		return settings.width * settings.height > settings.mineCount;
 	};
 
@@ -55,95 +49,103 @@ const Options = ({ onNewGame }: OptionsProps) => {
 
 	// TODO: refactor this to use an array mapping or something less html-y
 	return (
-		<div className="Options">
-			<table>
-				<thead>
-					<tr>
-						<th></th>
-						<th>Width</th>
-						<th>Height</th>
-						<th>Mines</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td>
-							<input
-								type="radio"
-								name="difficulty"
-								id="beginner"
-								onClick={() => setSettings({ ...settings, difficulty: 0 })}
-							/>
-						</td>
-						<td>Beginner</td>
-						<td>9</td>
-						<td>9</td>
-						<td>10</td>
-					</tr>
-					<tr>
-						<td>
-							<input
-								type="radio"
-								name="difficulty"
-								id="intermediate"
-								onClick={() => setSettings({ ...settings, difficulty: 1 })}
-							/>
-						</td>
-						<td>Intermediate</td>
-						<td>16</td>
-						<td>16</td>
-						<td>40</td>
-					</tr>
-					<tr>
-						<td>
-							<input
-								type="radio"
-								name="difficulty"
-								id="expert"
-								onClick={() => setSettings({ ...settings, difficulty: 2 })}
-							/>
-						</td>
-						<td>Expert</td>
-						<td>30</td>
-						<td>16</td>
-						<td>99</td>
-					</tr>
-					<tr>
-						<td>
-							<input
-								type="radio"
-								name="difficulty"
-								id="custom"
-								onClick={() => setSettings({ ...settings, difficulty: 3 })}
-							/>
-						</td>
-						<td>Custom</td>
-						<td>
-							<input
-								type="text"
-								onChange={(e) => handleInput(e, BoardParam.Width)}
-								value={settings.width}
-							/>
-						</td>
-						<td>
-							<input
-								type="text"
-								onChange={(e) => handleInput(e, BoardParam.Height)}
-								value={settings.height}
-							/>
-						</td>
-						<td>
-							<input
-								type="text"
-								onChange={(e) => handleInput(e, BoardParam.MineCount)}
-								value={settings.mineCount}
-							/>
-						</td>
-					</tr>
-				</tbody>
-			</table>
+		<>
+			<div className="Options">
+				<table
+					style={{
+						tableLayout: "auto",
+						width: "20%",
+					}}
+				>
+					<thead>
+						<tr>
+							<th></th>
+							<th></th>
+							<th>Width</th>
+							<th>Height</th>
+							<th>Mines</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>
+								<input
+									type="radio"
+									name="difficulty"
+									id="beginner"
+									onClick={() => setSettings({ ...settings, difficulty: 0 })}
+								/>
+							</td>
+							<td>Beginner</td>
+							<td>9</td>
+							<td>9</td>
+							<td>10</td>
+						</tr>
+						<tr>
+							<td>
+								<input
+									type="radio"
+									name="difficulty"
+									id="intermediate"
+									onClick={() => setSettings({ ...settings, difficulty: 1 })}
+								/>
+							</td>
+							<td>Intermediate</td>
+							<td>16</td>
+							<td>16</td>
+							<td>40</td>
+						</tr>
+						<tr>
+							<td>
+								<input
+									type="radio"
+									name="difficulty"
+									id="expert"
+									onClick={() => setSettings({ ...settings, difficulty: 2 })}
+								/>
+							</td>
+							<td>Expert</td>
+							<td>30</td>
+							<td>16</td>
+							<td>99</td>
+						</tr>
+						<tr>
+							<td>
+								<input
+									type="radio"
+									name="difficulty"
+									id="custom"
+									onClick={() => setSettings({ ...settings, difficulty: 3 })}
+								/>
+							</td>
+							<td>Custom</td>
+							<td>
+								<input
+									type="text"
+									onChange={(e) => handleInput(e, BoardParam.Width)}
+									value={settings.width}
+								/>
+							</td>
+							<td>
+								<input
+									type="text"
+									onChange={(e) => handleInput(e, BoardParam.Height)}
+									value={settings.height}
+								/>
+							</td>
+							<td>
+								<input
+									type="text"
+									onChange={(e) => handleInput(e, BoardParam.MineCount)}
+									value={settings.mineCount}
+								/>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
 			<button onClick={() => onNewGame(settings)}>New Game</button>
-		</div>
+		</>
 	);
 };
 

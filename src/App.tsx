@@ -5,6 +5,7 @@ import { DEFAULT_SETTINGS } from "./constants";
 import { GameData, State } from "./types";
 import { gameObj } from "./utils";
 import Board from "./components/Board";
+import Options from "./components/Options";
 
 function App() {
 	const [game, setGame] = useState<GameData>();
@@ -15,25 +16,23 @@ function App() {
 
 	switch (game?.state) {
 		case State.Win:
-			console.log('Winner!');
+			console.log("Winner!");
 			break;
 		case State.Lose:
-			console.log('Loser!');
+			console.log("Loser!");
 			break;
 	}
 
 	return (
 		<div className="App">
-			<button
-				onClick={() =>
-					setGame(
-						gameObj(window.newGame({ ...DEFAULT_SETTINGS, difficulty: 3 }))
-					)
-				}
-			>
-				New Game
-			</button>
-			{game?.board && <Board board={game.board} setGame={setGame} />}
+			<div className="game">
+				{game?.board && <Board board={game.board} setGame={setGame} />}
+				<Options
+					onNewGame={(gameParams) =>
+						setGame(gameObj(window.newGame(gameParams)))
+					}
+				/>
+			</div>
 		</div>
 	);
 }
