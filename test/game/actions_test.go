@@ -1,38 +1,12 @@
 package game_test
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 
 	g "github.com/jamestrew/gowasm-sweeper/pkg/game"
 )
-
-func foo(actual [][]bool) [][]int {
-	ret := [][]int{
-		{0, 1, 1, 1, 1, 1, 2, 9, 1},
-		{0, 1, 9, 2, 3, 9, 3, 1, 1},
-		{0, 1, 2, 9, 4, 9, 3, 0, 0},
-		{1, 1, 2, 1, 3, 9, 3, 1, 0},
-		{2, 9, 2, 0, 1, 2, 9, 1, 0},
-		{2, 9, 2, 0, 0, 1, 1, 1, 0},
-		{1, 1, 1, 0, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0, 0, 1, 1, 1},
-		{0, 0, 0, 0, 0, 0, 1, 9, 1},
-	}
-
-	for i, row := range actual {
-		for j, cell := range row {
-			if cell {
-				ret[j][i] = 1
-			} else {
-				ret[j][i] = 0
-			}
-		}
-	}
-	return ret
-}
 
 func TestOpenCell(t *testing.T) {
 	mines := [][]int{
@@ -65,7 +39,6 @@ func TestOpenCell(t *testing.T) {
 		game.OpenCell(x, y)
 		assert.Equal(t, g.Lose, game.State)
 		assert.Equal(t, open, game.Open)
-		fmt.Println(foo(game.Open))
 	}
 
 	smallOpen := func() {
@@ -108,7 +81,6 @@ func TestOpenCell(t *testing.T) {
 		assert.Equal(t, 0, game.Mines[y][x])
 		assert.Equal(t, g.Playing, game.State)
 		assert.Equal(t, open, game.Open)
-		fmt.Println(foo(game.Open))
 	}
 
 	onFlag := func() {
@@ -166,9 +138,40 @@ func TestOpenCell(t *testing.T) {
 		assert.Equal(t, g.Win, game.State)
 	}
 
+	notPlaying := func() {
+		g.CustomWidth = 4
+		g.CustomHeight = 3
+		g.CustomMineCount = 5
+		game, _ := g.NewGame(g.Custom)
+
+		game.Mines = [][]int{
+			{9, 1, 9, 1},
+			{1, 1, 1, 1},
+			{0, 1, 9, 1},
+		}
+		game.Open = [][]bool{
+			{false, true, false, true},
+			{true, true, true, true},
+			{false, true, false, true},
+		}
+		expected := [][]bool{
+			{false, true, false, true},
+			{true, true, true, true},
+			{false, true, false, true},
+		}
+		game.State = g.Win
+		game.OpenCell(0, 2)
+		assert.Equal(t, expected, game.Open)
+
+		game.State = g.Lose
+		game.OpenCell(0, 2)
+		assert.Equal(t, expected, game.Open)
+	}
+
 	gameOver()
 	smallOpen()
 	bigOpen()
 	onFlag()
 	winning()
+	notPlaying()
 }
