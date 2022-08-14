@@ -22,6 +22,26 @@
   align-items: center;
 }
 
+.custom-input {
+	width: 50px;
+}
+
+#option-table {
+	border-collapse: collapse;
+	font-size: 0.9em;
+}
+
+#option-table thead tr {
+	text-align: left;
+}
+
+#option-table th,
+#option-table td {
+	padding-right: 12px;
+}
+
+
+
 .Board {
 	position: relative;
   background-color: grey;
@@ -33,3 +53,4 @@
   text-align: center;
   border: 3px solid grey;
 }
+

@@ -5,7 +5,7 @@ import { DEFAULT_SETTINGS } from "./constants";
 import { GameData, State } from "./types";
 import { gameObj } from "./utils";
 import Board from "./components/Board";
-import Options from "./components/Options";
+import OptionsPanel from "./components/Options";
 
 function App() {
 	const [game, setGame] = useState<GameData>();
@@ -27,7 +27,7 @@ function App() {
 		<div className="App">
 			<div className="game">
 				{game?.board && <Board board={game.board} setGame={setGame} />}
-				<Options
+				<OptionsPanel
 					onNewGame={(gameParams) =>
 						setGame(gameObj(window.newGame(gameParams)))
 					}

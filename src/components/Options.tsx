@@ -1,62 +1,31 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 
-import { DEFAULT_SETTINGS } from "../constants";
+import { DEFAULT_SETTINGS, BOARD_OPTIONS } from "../constants";
 import { GameParams } from "../types";
+import DifficultyRow from './DifficultyRow'
 
 type OptionsProps = {
 	onNewGame: (settings: GameParams) => void;
 };
 
-enum BoardParam {
-	Width,
-	Height,
-	MineCount,
-}
 
-const Options = ({ onNewGame }: OptionsProps) => {
+const OptionsPanel = ({ onNewGame }: OptionsProps) => {
 	const [settings, setSettings] = useState<GameParams>(DEFAULT_SETTINGS);
 
 	const isValidCustomBoard = (settings: GameParams): boolean => {
 		return settings.width * settings.height > settings.mineCount;
 	};
 
-	const handleInput = (
-		event: React.ChangeEvent<HTMLInputElement>,
-		paramType: BoardParam
-	): void => {
-		const param = parseInt(event.target.value);
-		if (isNaN(param)) return;
-
-		const newSettings = { ...settings };
-		switch (paramType) {
-			case BoardParam.Width:
-				newSettings.width = param;
-				break;
-			case BoardParam.Height:
-				newSettings.height = param;
-				break;
-			case BoardParam.MineCount:
-				newSettings.mineCount = param;
-				break;
+	useEffect(() => {
+		if (!isValidCustomBoard(settings)) {
+			window.alert("Too many mines for the board dimensions");
 		}
+	}, [settings]);
 
-		if (isValidCustomBoard(newSettings)) {
-			setSettings(newSettings);
-		} else {
-			window.alert("too many mines for board dimensions");
-		}
-	};
-
-	// TODO: refactor this to use an array mapping or something less html-y
 	return (
 		<>
 			<div className="Options">
-				<table
-					style={{
-						tableLayout: "auto",
-						width: "20%",
-					}}
-				>
+				<table id="option-table">
 					<thead>
 						<tr>
 							<th></th>
@@ -67,80 +36,15 @@ const Options = ({ onNewGame }: OptionsProps) => {
 						</tr>
 					</thead>
 					<tbody>
-						<tr>
-							<td>
-								<input
-									type="radio"
-									name="difficulty"
-									id="beginner"
-									onClick={() => setSettings({ ...settings, difficulty: 0 })}
+						{BOARD_OPTIONS.map((option, idx) => (
+							<tr key={idx}>
+								<DifficultyRow
+									option={option}
+									settings={settings}
+									setSettings={setSettings}
 								/>
-							</td>
-							<td>Beginner</td>
-							<td>9</td>
-							<td>9</td>
-							<td>10</td>
-						</tr>
-						<tr>
-							<td>
-								<input
-									type="radio"
-									name="difficulty"
-									id="intermediate"
-									onClick={() => setSettings({ ...settings, difficulty: 1 })}
-								/>
-							</td>
-							<td>Intermediate</td>
-							<td>16</td>
-							<td>16</td>
-							<td>40</td>
-						</tr>
-						<tr>
-							<td>
-								<input
-									type="radio"
-									name="difficulty"
-									id="expert"
-									onClick={() => setSettings({ ...settings, difficulty: 2 })}
-								/>
-							</td>
-							<td>Expert</td>
-							<td>30</td>
-							<td>16</td>
-							<td>99</td>
-						</tr>
-						<tr>
-							<td>
-								<input
-									type="radio"
-									name="difficulty"
-									id="custom"
-									onClick={() => setSettings({ ...settings, difficulty: 3 })}
-								/>
-							</td>
-							<td>Custom</td>
-							<td>
-								<input
-									type="text"
-									onChange={(e) => handleInput(e, BoardParam.Width)}
-									value={settings.width}
-								/>
-							</td>
-							<td>
-								<input
-									type="text"
-									onChange={(e) => handleInput(e, BoardParam.Height)}
-									value={settings.height}
-								/>
-							</td>
-							<td>
-								<input
-									type="text"
-									onChange={(e) => handleInput(e, BoardParam.MineCount)}
-									value={settings.mineCount}
-								/>
-							</td>
-						</tr>
+							</tr>
+						))}
 					</tbody>
 				</table>
 			</div>
@@ -149,4 +53,4 @@ const Options = ({ onNewGame }: OptionsProps) => {
 	);
 };
 
-export default Options;
+export default OptionsPanel;
