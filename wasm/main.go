@@ -38,7 +38,7 @@ func flagCell(this js.Value, args []js.Value) interface{} {
 	return game.AsJson()
 }
 
-func chordedOpen(this js.Value, args []js.Value) interface {} {
+func chordedOpen(this js.Value, args []js.Value) interface{} {
 	x, y := args[0].Int(), args[1].Int()
 	game.ChordedOpen(x, y)
 	return game.AsJson()
