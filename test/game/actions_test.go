@@ -133,9 +133,16 @@ func TestOpenCell(t *testing.T) {
 			{true, true, true, true},
 			{true, true, false, true},
 		}
+
+		flagged := [][]bool{
+			{true, false, true, false},
+			{false, false, false, false},
+			{false, false, true, false},
+		}
 		game.OpenCell(0, 2)
 		assert.Equal(t, expected, game.Open)
 		assert.Equal(t, g.Win, game.State)
+		assert.Equal(t, flagged, game.Flagged)
 	}
 
 	notPlaying := func() {

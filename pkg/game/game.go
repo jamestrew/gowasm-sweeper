@@ -158,6 +158,20 @@ func (g *Game) CheckWin() bool {
 	return ret
 }
 
+func (g *Game) flagAllMines() {
+	if g.State != Win {
+		return
+	}
+
+	for i, row := range g.Mines {
+		for j, cell := range row {
+			if cell == 9 {
+				g.Flagged[i][j] = true
+			}
+		}
+	}
+}
+
 func (g *Game) AsJson() string {
 	type gameData struct {
 		State GameState

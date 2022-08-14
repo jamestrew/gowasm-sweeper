@@ -16,6 +16,7 @@ func (g *Game) OpenCell(x, y int) {
 	g.OpenBlankNeighbors()
 	if g.CheckWin() {
 		g.State = Win
+		g.flagAllMines()
 	}
 }
 
@@ -34,14 +35,4 @@ func (g *Game) ChordedOpen(x, y int) {
 	for _, pos := range g.cellNeighbors(x, y) {
 		g.OpenCell(pos.X, pos.Y)
 	}
-}
-
-func (g *Game) flagCountMatchesCell(x, y int) bool {
-	flagCount := 0
-	for _, pos := range g.cellNeighbors(x, y) {
-		if g.Flagged[pos.Y][pos.X] {
-			flagCount++
-		}
-	}
-	return flagCount == g.Mines[y][x]
 }
