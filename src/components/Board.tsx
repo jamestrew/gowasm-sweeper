@@ -26,6 +26,7 @@ const Board = ({ board, setGame }: BoardProps) => {
 						cellType={board[i][j]}
 						openCell={() => setGame(gameObj(window.openCell(j, i)))}
 						flagCell={() => setGame(gameObj(window.flagCell(j, i)))}
+						chordedOpen={() => setGame(gameObj(window.chordedOpen(j, i)))}
 					/>
 				))
 			)}

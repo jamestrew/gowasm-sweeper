@@ -35,6 +35,12 @@ func flagCell(this js.Value, args []js.Value) interface{} {
 	return game.AsJson()
 }
 
+func chordedOpen(this js.Value, args []js.Value) interface {} {
+	x, y := args[0].Int(), args[1].Int()
+	game.ChordedOpen(x, y)
+	return game.AsJson()
+}
+
 func getState(this js.Value, args []js.Value) interface{} {
 	return game.AsJson()
 }
@@ -43,6 +49,7 @@ func main() {
 	js.Global().Set("newGame", js.FuncOf(newGame))
 	js.Global().Set("openCell", js.FuncOf(openCell))
 	js.Global().Set("flagCell", js.FuncOf(flagCell))
+	js.Global().Set("chordedOpen", js.FuncOf(chordedOpen))
 	js.Global().Set("getState", js.FuncOf(getState))
 	<-make(chan bool)
 }

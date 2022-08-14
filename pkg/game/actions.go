@@ -26,3 +26,12 @@ func (g *Game) ToggleFlag(x, y int) {
 }
 
 // TODO: right click opening
+func (g *Game) ChordedOpen(x, y int) {
+	if !g.Open[y][x] || g.State != Playing {
+		return
+	}
+
+	for _, pos := range g.cellNeighbors(x, y) {
+		g.OpenCell(pos.X, pos.Y)
+	}
+}

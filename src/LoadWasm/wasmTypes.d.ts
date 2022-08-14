@@ -6,6 +6,7 @@ declare global {
 		newGame: (gameParams: GameParams) => string;
 		openCell: (x: number, y: number) => string;
 		flagCell: (x: number, y: number) => string;
+		chordedOpen: (x: number, y: number) => string;
 		getState: () => string;
 	}
 }

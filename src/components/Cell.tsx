@@ -1,5 +1,6 @@
 import { CELL_SIZE } from "../constants";
 import "../App.css";
+import { useState } from "react";
 
 type CellProps = {
 	x: number;
@@ -7,16 +8,32 @@ type CellProps = {
 	cellType: number;
 	openCell: () => void;
 	flagCell: () => void;
+	chordedOpen: () => void;
 };
 
-const Cell = ({ x, y, cellType, openCell, flagCell }: CellProps) => {
+const Cell = ({
+	x,
+	y,
+	cellType,
+	openCell,
+	flagCell,
+	chordedOpen,
+}: CellProps) => {
+	const [clickDown, setClickDown] = useState<number>();
 	const { icon, background } = cellIcon(cellType);
 
-	const handleRightClick = (
-		e: React.MouseEvent<HTMLDivElement, MouseEvent>
-	) => {
-		e.preventDefault();
-		flagCell();
+	const sendAction = () => {
+		switch (clickDown) {
+			case 1:
+				openCell();
+				break;
+			case 2:
+				flagCell();
+				break;
+			case 3:
+				chordedOpen();
+				break;
+		}
 	};
 
 	return (
@@ -29,8 +46,9 @@ const Cell = ({ x, y, cellType, openCell, flagCell }: CellProps) => {
 				gridRowStart: y + 1,
 				background: background,
 			}}
-			onClick={openCell}
-			onContextMenu={(e) => handleRightClick(e)}
+			onContextMenu={(e) => e.preventDefault()}
+			onMouseDown={(e) => setClickDown(e.buttons)}
+			onMouseUp={() => sendAction()}
 		>
 			{icon}
 		</div>
@@ -64,7 +82,7 @@ const cellIcon = (cellType: number): { icon: string; background: string } => {
 			break;
 		case -2:
 			icon = "🚩";
-			background = "white"
+			background = "white";
 			break;
 		default:
 			throw new Error(`undefined cell type ${cellType}`);
