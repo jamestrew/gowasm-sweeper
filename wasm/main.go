@@ -1,7 +1,9 @@
 package main
 
 import (
+	"math/rand"
 	"syscall/js"
+	"time"
 
 	g "github.com/jamestrew/gowasm-sweeper/pkg/game"
 )
@@ -16,6 +18,7 @@ func newGame(this js.Value, args []js.Value) interface{} {
 		g.CustomHeight = gameParams.Get("height").Int()
 		g.CustomMineCount = gameParams.Get("mineCount").Int()
 	}
+	rand.Seed(time.Now().UnixNano())
 	game, _ = g.NewGame(difficulty)
 	// TODO: create random seed
 	game.FillMines()
