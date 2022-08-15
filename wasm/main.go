@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"math/rand"
 	"syscall/js"
 	"time"
@@ -44,6 +45,11 @@ func chordedOpen(this js.Value, args []js.Value) interface{} {
 	return game.AsJson()
 }
 
+func debugMines(this js.Value, args []js.Value) interface{} {
+	fmt.Println(game.Mines)
+	return nil
+}
+
 func getState(this js.Value, args []js.Value) interface{} {
 	return game.AsJson()
 }
@@ -53,6 +59,7 @@ func main() {
 	js.Global().Set("openCell", js.FuncOf(openCell))
 	js.Global().Set("flagCell", js.FuncOf(flagCell))
 	js.Global().Set("chordedOpen", js.FuncOf(chordedOpen))
+	js.Global().Set("debugMines", js.FuncOf(debugMines))
 	js.Global().Set("getState", js.FuncOf(getState))
 	<-make(chan bool)
 }
