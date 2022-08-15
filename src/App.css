@@ -53,3 +53,33 @@
   cursor: default;
   user-select: none;
 }
+
+.Scoreboard {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: #c0c0c0;
+  border: 3px solid black;
+	border-bottom: none;
+	height: 50px;
+	width: 200px;
+}
+
+@font-face{
+	font-family: 'digital-clock-font';
+	src: url('../public/digital-7 (mono).ttf')
+}
+
+.Counter {
+	padding: 12px;
+	color: red;
+	font-size: 2em;
+	font-weight: bold;
+	font-family: 'digital-clock-font'
+}
+
+.MinesweeperGuy {
+	padding: 12px;
+	font-size: 2em;
+}

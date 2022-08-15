@@ -2,35 +2,36 @@ import { useEffect, useState } from "react";
 import "./App.css";
 
 import { DEFAULT_SETTINGS } from "./constants";
-import { GameData, State } from "./types";
+import { GameData, GameParams, State } from "./types";
 import { gameObj } from "./utils";
 import Board from "./components/Board";
 import OptionsPanel from "./components/Options";
+import Scoreboard from "./components/Scoreboard";
 
 function App() {
 	const [game, setGame] = useState<GameData>();
+	const [startTime, setStartTime] = useState<Date>(new Date());
+
+	const startGame = (settings: GameParams) => {
+		setStartTime(new Date());
+		setGame(gameObj(window.newGame(settings)));
+	};
 
 	useEffect(() => {
-		setGame(gameObj(window.newGame(DEFAULT_SETTINGS)));
+		startGame(DEFAULT_SETTINGS);
 	}, []);
-
-	switch (game?.state) {
-		case State.Win:
-			console.log("Winner!");
-			break;
-		case State.Lose:
-			console.log("Loser!");
-			break;
-	}
 
 	return (
 		<div className="App">
 			<div className="game">
+				<Scoreboard
+					startTime={startTime}
+					state={game?.state || State.Playing}
+					flagCount={10}
+				/>
 				{game?.board && <Board board={game.board} setGame={setGame} />}
 				<OptionsPanel
-					onNewGame={(gameParams) =>
-						setGame(gameObj(window.newGame(gameParams)))
-					}
+					onNewGame={(gameParams: GameParams) => startGame(gameParams)}
 				/>
 			</div>
 		</div>
