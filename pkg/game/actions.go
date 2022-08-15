@@ -2,9 +2,14 @@ package game
 
 // FIX: over-opening
 func (g *Game) OpenCell(x, y int) {
-	if g.Flagged[y][x] || g.State != Playing {
+	if g.Flagged[y][x] || !g.playable() {
 		return
 	}
+
+	if g.State == Unstarted {
+		g.State = Playing
+	}
+
 	if g.Mines[y][x] == 9 {
 		g.State = Lose
 	}
@@ -12,8 +17,10 @@ func (g *Game) OpenCell(x, y int) {
 	if g.Mines[y][x] == 0 {
 		g.OpenBlankCells(x, y)
 	}
+
 	g.Open[y][x] = true
 	g.OpenBlankNeighbors()
+
 	if g.CheckWin() {
 		g.State = Win
 		g.flagAllMines()
@@ -21,7 +28,7 @@ func (g *Game) OpenCell(x, y int) {
 }
 
 func (g *Game) ToggleFlag(x, y int) {
-	if !g.Open[y][x] && g.State == Playing {
+	if !g.Open[y][x] && g.playable() {
 		g.Flagged[y][x] = !g.Flagged[y][x]
 	}
 }

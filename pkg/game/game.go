@@ -55,7 +55,16 @@ func NewGame(difficulty DifficultyLevel) (*Game, error) {
 	mines := utils.InitBlankMatrix[int](width, height)
 	open := utils.InitBlankMatrix[bool](width, height)
 	flagged := utils.InitBlankMatrix[bool](width, height)
-	return &Game{width, height, mineCount, difficulty, mines, open, flagged, Playing}, nil
+	return &Game{
+		width,
+		height,
+		mineCount,
+		difficulty,
+		mines,
+		open,
+		flagged,
+		Unstarted,
+	}, nil
 }
 
 func (g *Game) CalcAllNeighbors() {

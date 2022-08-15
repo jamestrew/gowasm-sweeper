@@ -48,6 +48,7 @@ type MinesweeperGuyProps = {
 // TODO: onClick restart game with current settings
 const MinesweeperGuy = ({ state }: MinesweeperGuyProps) => {
 	const emoji = new Map<State, string>([
+		[State.Unstarted, "😇"],
 		[State.Playing, "😇"],
 		[State.Lose, "💀"],
 		[State.Win, "😎"],

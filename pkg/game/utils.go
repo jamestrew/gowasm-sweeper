@@ -84,3 +84,7 @@ func (g *Game) flagCountMatchesCell(x, y int) bool {
 	}
 	return flagCount == g.Mines[y][x]
 }
+
+func (g *Game) playable() bool {
+	return g.State == Unstarted || g.State == Playing
+}

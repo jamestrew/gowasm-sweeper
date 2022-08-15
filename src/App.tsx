@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./App.css";
 
 import { DEFAULT_SETTINGS } from "./constants";
@@ -11,9 +11,9 @@ import Scoreboard from "./components/Scoreboard";
 function App() {
 	const [game, setGame] = useState<GameData>();
 	const [startTime, setStartTime] = useState<Date>(new Date());
+	const prevState = useRef<State>(State.Unstarted);
 
 	const startGame = (settings: GameParams) => {
-		setStartTime(new Date());
 		setGame(gameObj(window.newGame(settings)));
 	};
 
@@ -21,12 +21,19 @@ function App() {
 		startGame(DEFAULT_SETTINGS);
 	}, []);
 
+	useEffect(() => {
+		if (prevState.current === State.Unstarted && game?.state === State.Playing) {
+			setStartTime(new Date());
+		}
+		prevState.current = game?.state ?? State.Unstarted;
+	}, [game])
+
 	return (
 		<div className="App">
 			<div className="game">
 				<Scoreboard
 					startTime={startTime}
-					state={game?.state || State.Playing}
+					state={game?.state || State.Unstarted}
 					flagCount={game?.flagCount ?? 999}
 				/>
 				{game?.board && <Board board={game.board} setGame={setGame} />}

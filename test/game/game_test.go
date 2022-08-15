@@ -18,7 +18,7 @@ func TestNewGame(t *testing.T) {
 		assert.Equal(t, 9, game.Width)
 		assert.Equal(t, 9, game.Height)
 		assert.Equal(t, 10, game.MineCount)
-		assert.Equal(t, g.Playing, game.State)
+		assert.Equal(t, g.Unstarted, game.State)
 	}
 
 	intermediateGame := func() {
@@ -28,7 +28,7 @@ func TestNewGame(t *testing.T) {
 		assert.Equal(t, 16, game.Width)
 		assert.Equal(t, 16, game.Height)
 		assert.Equal(t, 40, game.MineCount)
-		assert.Equal(t, g.Playing, game.State)
+		assert.Equal(t, g.Unstarted, game.State)
 	}
 
 	expertGame := func() {
@@ -38,7 +38,7 @@ func TestNewGame(t *testing.T) {
 		assert.Equal(t, 30, game.Width)
 		assert.Equal(t, 16, game.Height)
 		assert.Equal(t, 99, game.MineCount)
-		assert.Equal(t, g.Playing, game.State)
+		assert.Equal(t, g.Unstarted, game.State)
 	}
 
 	customGameOk := func() {
@@ -51,7 +51,7 @@ func TestNewGame(t *testing.T) {
 		assert.Equal(t, 420, game.Width)
 		assert.Equal(t, 69, game.Height)
 		assert.Equal(t, 69, game.MineCount)
-		assert.Equal(t, g.Playing, game.State)
+		assert.Equal(t, g.Unstarted, game.State)
 	}
 
 	customTooManyMines := func() {
@@ -324,7 +324,7 @@ func TestAsJson(t *testing.T) {
 		{0, 1, 9, 1},
 	}
 
-	expected := "{\"State\":1,\"Board\":[[-1,-1,-1,-1],[-1,-1,-1,-1],[-1,-1,-1,-1]],\"FlagCount\":5}"
+	expected := "{\"State\":0,\"Board\":[[-1,-1,-1,-1],[-1,-1,-1,-1],[-1,-1,-1,-1]],\"FlagCount\":5}"
 	assert.Equal(t, expected, game.AsJson())
 }
 
