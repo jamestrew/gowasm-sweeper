@@ -50,6 +50,7 @@ const DifficultyRow = ({
 					onClick={() =>
 						setSettings({ ...settings, difficulty: option.difficulty })
 					}
+					defaultChecked={settings.difficulty === option.difficulty}
 				/>
 			</td>
 			<td>{difficulties[option.difficulty]}</td>
