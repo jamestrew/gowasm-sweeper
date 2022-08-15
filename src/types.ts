@@ -1,6 +1,7 @@
 export type GameData = {
   state: State;
   board: number[][];
+	flagCount: number;
 };
 
 export type GameParams = {

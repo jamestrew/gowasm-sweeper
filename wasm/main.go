@@ -50,7 +50,7 @@ func debugMines(this js.Value, args []js.Value) interface{} {
 	return nil
 }
 
-func getState(this js.Value, args []js.Value) interface{} {
+func debugState(this js.Value, args []js.Value) interface{} {
 	return game.AsJson()
 }
 
@@ -60,6 +60,6 @@ func main() {
 	js.Global().Set("flagCell", js.FuncOf(flagCell))
 	js.Global().Set("chordedOpen", js.FuncOf(chordedOpen))
 	js.Global().Set("debugMines", js.FuncOf(debugMines))
-	js.Global().Set("getState", js.FuncOf(getState))
+	js.Global().Set("debugState", js.FuncOf(debugState))
 	<-make(chan bool)
 }

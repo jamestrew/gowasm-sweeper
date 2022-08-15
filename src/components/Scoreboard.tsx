@@ -10,17 +10,18 @@ type ScoreboardProps = {
 };
 
 const Scoreboard = ({ startTime, state, flagCount }: ScoreboardProps) => {
-	// left side mine counter
-	// right side time counter
 	const [seconds, setSeconds] = useState(0);
 
+	// FIX: timer temporarily pauses if inputs given
 	useEffect(() => {
-		const myInterval = setInterval(() => {
-			setSeconds(
-				Math.round((new Date().getTime() - startTime.getTime()) / 1000)
-			);
-		}, 1000);
-		return () => clearInterval(myInterval);
+		if (state === State.Playing) {
+			const myInterval = setInterval(() => {
+				setSeconds(
+					Math.round((new Date().getTime() - startTime.getTime()) / 1000)
+				);
+			}, 1000);
+			return () => clearInterval(myInterval);
+		}
 	});
 
 	return (
@@ -44,6 +45,7 @@ type MinesweeperGuyProps = {
 	state: State;
 };
 
+// TODO: onClick restart game with current settings
 const MinesweeperGuy = ({ state }: MinesweeperGuyProps) => {
 	const emoji = new Map<State, string>([
 		[State.Playing, "😇"],

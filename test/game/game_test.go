@@ -324,7 +324,7 @@ func TestAsJson(t *testing.T) {
 		{0, 1, 9, 1},
 	}
 
-	expected := "{\"State\":1,\"Board\":[[-1,-1,-1,-1],[-1,-1,-1,-1],[-1,-1,-1,-1]]}"
+	expected := "{\"State\":1,\"Board\":[[-1,-1,-1,-1],[-1,-1,-1,-1],[-1,-1,-1,-1]],\"FlagCount\":5}"
 	assert.Equal(t, expected, game.AsJson())
 }
 

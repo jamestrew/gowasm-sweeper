@@ -27,7 +27,7 @@ function App() {
 				<Scoreboard
 					startTime={startTime}
 					state={game?.state || State.Playing}
-					flagCount={10}
+					flagCount={game?.flagCount ?? 999}
 				/>
 				{game?.board && <Board board={game.board} setGame={setGame} />}
 				<OptionsPanel

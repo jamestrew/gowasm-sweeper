@@ -172,13 +172,26 @@ func (g *Game) flagAllMines() {
 	}
 }
 
+func (g *Game) FlagCount() int {
+	flagCount := 0
+	for _, row := range g.Flagged {
+		for _, cell := range row {
+			if cell {
+				flagCount++
+			}
+		}
+	}
+	return g.MineCount - flagCount
+}
+
 func (g *Game) AsJson() string {
 	type gameData struct {
-		State GameState
-		Board [][]int
+		State     GameState
+		Board     [][]int
+		FlagCount int
 	}
 
-	data := &gameData{g.State, g.AsArray()}
+	data := &gameData{g.State, g.AsArray(), g.FlagCount()}
 	ret, err := json.Marshal(data)
 	if err != nil {
 		panic(err)
