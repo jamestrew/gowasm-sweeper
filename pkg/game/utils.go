@@ -35,6 +35,21 @@ func createMinePositions(game *Game) []Pos {
 	return mines
 }
 
+func (g *Game) newMineHomes(noGoZone []Pos, mineCount int) []Pos {
+	minesCreated := 0
+	mines := posArray(mineCount)
+
+	for minesCreated < mineCount {
+		testPosition := Pos{rand.Intn(g.Width), rand.Intn(g.Height)}
+		if !isDuplicateMinePos(testPosition, mines) &&
+			g.Mines[testPosition.Y][testPosition.X] != 9 {
+			mines[minesCreated] = testPosition
+			minesCreated++
+		}
+	}
+	return mines
+}
+
 func (g *Game) cellNeighbors(x, y int) []Pos {
 	dxs := [3]int{-1, 0, 1}
 	dys := [3]int{0, 1, -1}
@@ -53,6 +68,35 @@ func (g *Game) cellNeighbors(x, y int) []Pos {
 		}
 	}
 	return positions
+}
+
+func (g *Game) positionsMineCount(positions []Pos) int {
+	mineCount := 0
+	for _, pos := range positions {
+		if g.Mines[pos.Y][pos.X] == 9 {
+			g.Mines[pos.Y][pos.X] = 0
+			mineCount++
+		}
+	}
+	return mineCount
+}
+
+func (g *Game) randomCellWith(cellType int) Pos {
+	for {
+		pos := Pos{rand.Intn(g.Width), rand.Intn(g.Height)}
+		if g.Mines[pos.Y][pos.X] == cellType {
+			return pos
+		}
+	}
+}
+
+func (g *Game) randomCellNot(cellType int) Pos {
+	for {
+		pos := Pos{rand.Intn(g.Width), rand.Intn(g.Height)}
+		if g.Mines[pos.Y][pos.X] != cellType {
+			return pos
+		}
+	}
 }
 
 // TODO
@@ -87,4 +131,27 @@ func (g *Game) flagCountMatchesCell(x, y int) bool {
 
 func (g *Game) playable() bool {
 	return g.State == Unstarted || g.State == Playing
+}
+
+func (g *Game) blankExists() bool {
+	return (g.Width*g.Height)-g.MineCount >= 9
+}
+
+func (g *Game) ensureGoodFirstMove(x, y int) {
+	if g.Mines[y][x] == 0 {
+		return
+	}
+
+	if g.blankExists() {
+		neighbors := g.cellNeighbors(x, y)
+		mineCount := g.positionsMineCount(neighbors)
+		for _, pos := range g.newMineHomes(neighbors, mineCount) {
+			g.Mines[pos.Y][pos.X] = 9
+		}
+	} else {
+		emptyPos := g.randomCellNot(9)
+		g.Mines[y][x] = 9
+		g.Mines[emptyPos.Y][emptyPos.X] = 0
+	}
+	g.CalcAllNeighbors()
 }

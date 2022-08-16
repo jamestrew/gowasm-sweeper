@@ -41,26 +41,6 @@ func TestOpenCell(t *testing.T) {
 		assert.Equal(t, open, game.Open)
 	}
 
-	smallOpen := func() {
-		game, _ := g.NewGame(g.Beginner)
-		game.Mines = mines
-		x, y := 0, 4
-		open := [][]bool{
-			{false, false, false, false, false, false, false, false, false},
-			{false, false, false, false, false, false, false, false, false},
-			{false, false, false, false, false, false, false, false, false},
-			{false, false, false, false, false, false, false, false, false},
-			{true, false, false, false, false, false, false, false, false},
-			{false, false, false, false, false, false, false, false, false},
-			{false, false, false, false, false, false, false, false, false},
-			{false, false, false, false, false, false, false, false, false},
-			{false, false, false, false, false, false, false, false, false},
-		}
-		game.OpenCell(x, y)
-		assert.Equal(t, g.Playing, game.State)
-		assert.Equal(t, open, game.Open)
-	}
-
 	bigOpen := func() {
 		game, _ := g.NewGame(g.Beginner)
 		game.Mines = mines
@@ -176,7 +156,6 @@ func TestOpenCell(t *testing.T) {
 	}
 
 	gameOver()
-	smallOpen()
 	bigOpen()
 	onFlag()
 	winning()
