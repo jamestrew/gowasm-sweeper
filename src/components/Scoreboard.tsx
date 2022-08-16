@@ -12,7 +12,7 @@ const Scoreboard = ({ state, flagCount }: ScoreboardProps) => {
 	const [seconds, setSeconds] = useState(0);
 
 	useEffect(() => {
-		if (state === State.Playing) {
+		if (state === State.Playing && seconds <= 999) {
 			const myInterval = setInterval(() => {
 				setSeconds((prev) => prev + 1);
 			}, 1000);
@@ -22,7 +22,7 @@ const Scoreboard = ({ state, flagCount }: ScoreboardProps) => {
 		if (state === State.Unstarted) {
 			setSeconds(0);
 		}
-	}, [state]);
+	}, [state, seconds]);
 
 	return (
 		<div className="Scoreboard">
