@@ -4,25 +4,25 @@ import "../App.css";
 import { State } from "../types";
 
 type ScoreboardProps = {
-	startTime: Date;
 	state: State;
 	flagCount: number;
 };
 
-const Scoreboard = ({ startTime, state, flagCount }: ScoreboardProps) => {
+const Scoreboard = ({ state, flagCount }: ScoreboardProps) => {
 	const [seconds, setSeconds] = useState(0);
 
-	// FIX: timer temporarily pauses if inputs given
 	useEffect(() => {
 		if (state === State.Playing) {
 			const myInterval = setInterval(() => {
-				setSeconds(
-					Math.round((new Date().getTime() - startTime.getTime()) / 1000)
-				);
+				setSeconds((prev) => prev + 1);
 			}, 1000);
 			return () => clearInterval(myInterval);
 		}
-	});
+
+		if (state === State.Unstarted) {
+			setSeconds(0);
+		}
+	}, [state]);
 
 	return (
 		<div className="Scoreboard">
