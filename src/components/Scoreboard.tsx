@@ -38,7 +38,7 @@ type CounterProps = {
 };
 
 const Counter = ({ value }: CounterProps) => {
-	return <div className="Counter">{value.toString()}</div>;
+	return <div className="Counter" style={{ paddingRight: "1px"}}>{value.toString()}</div>;
 };
 
 type MinesweeperGuyProps = {
