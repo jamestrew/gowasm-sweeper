@@ -18,8 +18,13 @@ const OptionsPanel = ({ settings, setSettings, startGame }: OptionsProps) => {
 	useEffect(() => {
 		if (!isValidCustomBoard(settings)) {
 			window.alert("Too many mines for the board dimensions");
+			const newSettings = {
+				...settings,
+				mineCount: settings.width * settings.height - 1,
+			};
+			setSettings(newSettings);
 		}
-	}, [settings]);
+	}, [settings, setSettings]);
 
 	return (
 		<>
