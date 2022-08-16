@@ -52,6 +52,9 @@
   border: 3px solid grey;
   cursor: default;
   user-select: none;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 .Scoreboard {
