@@ -72,11 +72,17 @@
 }
 
 .Counter {
-	padding: 12px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin: 12px;
 	color: red;
 	font-size: 2em;
 	font-weight: bold;
-	font-family: 'digital-clock-font'
+	font-family: 'digital-clock-font';
+	width: 3em;
+	height: 1em;
+	background-color: grey;
 }
 
 .MinesweeperGuy {
