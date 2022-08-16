@@ -6,9 +6,10 @@ import { State } from "../types";
 type ScoreboardProps = {
 	state: State;
 	flagCount: number;
+	restartGame: () => void;
 };
 
-const Scoreboard = ({ state, flagCount }: ScoreboardProps) => {
+const Scoreboard = ({ state, flagCount, restartGame }: ScoreboardProps) => {
 	const [seconds, setSeconds] = useState(0);
 
 	useEffect(() => {
@@ -27,7 +28,7 @@ const Scoreboard = ({ state, flagCount }: ScoreboardProps) => {
 	return (
 		<div className="Scoreboard">
 			<Counter value={seconds} />
-			<MinesweeperGuy state={state} />
+			<MinesweeperGuy state={state} restartGame={restartGame} />
 			<Counter value={flagCount} />
 		</div>
 	);
@@ -38,15 +39,20 @@ type CounterProps = {
 };
 
 const Counter = ({ value }: CounterProps) => {
-	return <div className="Counter" style={{ paddingRight: "1px"}}>{value.toString()}</div>;
+	return (
+		<div className="Counter" style={{ paddingRight: "1px" }}>
+			{value.toString()}
+		</div>
+	);
 };
 
 type MinesweeperGuyProps = {
 	state: State;
+	restartGame: () => void;
 };
 
 // TODO: onClick restart game with current settings
-const MinesweeperGuy = ({ state }: MinesweeperGuyProps) => {
+const MinesweeperGuy = ({ state, restartGame }: MinesweeperGuyProps) => {
 	const emoji = new Map<State, string>([
 		[State.Unstarted, "😇"],
 		[State.Playing, "😇"],
@@ -54,7 +60,11 @@ const MinesweeperGuy = ({ state }: MinesweeperGuyProps) => {
 		[State.Win, "😎"],
 	]);
 
-	return <div className="MinesweeperGuy">{emoji.get(state)}</div>;
+	return (
+		<div className="MinesweeperGuy" onClick={restartGame}>
+			{emoji.get(state)}
+		</div>
+	);
 };
 
 export default Scoreboard;

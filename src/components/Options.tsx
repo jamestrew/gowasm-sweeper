@@ -1,17 +1,16 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
-import { DEFAULT_SETTINGS, BOARD_OPTIONS } from "../constants";
+import { BOARD_OPTIONS } from "../constants";
 import { GameParams } from "../types";
-import DifficultyRow from './DifficultyRow'
+import DifficultyRow from "./DifficultyRow";
 
 type OptionsProps = {
-	onNewGame: (settings: GameParams) => void;
+	settings: GameParams;
+	setSettings: React.Dispatch<GameParams>;
+	startGame: () => void;
 };
 
-
-const OptionsPanel = ({ onNewGame }: OptionsProps) => {
-	const [settings, setSettings] = useState<GameParams>(DEFAULT_SETTINGS);
-
+const OptionsPanel = ({ settings, setSettings, startGame }: OptionsProps) => {
 	const isValidCustomBoard = (settings: GameParams): boolean => {
 		return settings.width * settings.height > settings.mineCount;
 	};
@@ -48,7 +47,7 @@ const OptionsPanel = ({ onNewGame }: OptionsProps) => {
 					</tbody>
 				</table>
 			</div>
-			<button onClick={() => onNewGame(settings)}>New Game</button>
+			<button onClick={startGame}>New Game</button>
 		</>
 	);
 };

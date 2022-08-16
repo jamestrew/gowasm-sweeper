@@ -10,6 +10,7 @@ import Scoreboard from "./components/Scoreboard";
 
 function App() {
 	const [game, setGame] = useState<GameData>();
+	const [settings, setSettings] = useState<GameParams>(DEFAULT_SETTINGS);
 
 	const startGame = (settings: GameParams) => {
 		setGame(gameObj(window.newGame(settings)));
@@ -25,10 +26,13 @@ function App() {
 				<Scoreboard
 					state={game?.state || State.Unstarted}
 					flagCount={game?.flagCount ?? 999}
+					restartGame={() => startGame(settings)}
 				/>
 				{game?.board && <Board board={game.board} setGame={setGame} />}
 				<OptionsPanel
-					onNewGame={(gameParams: GameParams) => startGame(gameParams)}
+					settings={settings}
+					setSettings={setSettings}
+					startGame={() => startGame(settings)}
 				/>
 			</div>
 		</div>
