@@ -150,8 +150,8 @@ func (g *Game) ensureGoodFirstMove(x, y int) {
 		}
 	} else {
 		emptyPos := g.randomCellNot(9)
-		g.Mines[y][x] = 9
-		g.Mines[emptyPos.Y][emptyPos.X] = 0
+		g.Mines[y][x] = 0
+		g.Mines[emptyPos.Y][emptyPos.X] = 9
 	}
 	g.CalcAllNeighbors()
 }
