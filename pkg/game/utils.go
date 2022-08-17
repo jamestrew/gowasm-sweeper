@@ -50,7 +50,7 @@ func (g *Game) newMineHomes(noGoZone []Pos, mineCount int) []Pos {
 	return mines
 }
 
-func (g *Game) cellNeighbors(x, y int) []Pos {
+func (g *Game) CellNeighbors(x, y int) []Pos {
 	dxs := [3]int{-1, 0, 1}
 	dys := [3]int{0, 1, -1}
 
@@ -121,7 +121,7 @@ func GetBoardParams(level DifficultyLevel) (int, int, int) {
 
 func (g *Game) flagCountMatchesCell(x, y int) bool {
 	flagCount := 0
-	for _, pos := range g.cellNeighbors(x, y) {
+	for _, pos := range g.CellNeighbors(x, y) {
 		if g.Flagged[pos.Y][pos.X] {
 			flagCount++
 		}
@@ -143,7 +143,7 @@ func (g *Game) ensureGoodFirstMove(x, y int) {
 	}
 
 	if g.blankExists() {
-		neighbors := g.cellNeighbors(x, y)
+		neighbors := g.CellNeighbors(x, y)
 		mineCount := g.positionsMineCount(neighbors)
 		for _, pos := range g.newMineHomes(neighbors, mineCount) {
 			g.Mines[pos.Y][pos.X] = 9

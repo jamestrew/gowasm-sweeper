@@ -3,7 +3,6 @@ import "./App.css";
 
 import { DEFAULT_SETTINGS } from "./constants";
 import { GameData, GameParams, State } from "./types";
-import { gameObj } from "./utils";
 import Board from "./components/Board";
 import OptionsPanel from "./components/Options";
 import Scoreboard from "./components/Scoreboard";
@@ -13,7 +12,7 @@ function App() {
 	const [settings, setSettings] = useState<GameParams>(DEFAULT_SETTINGS);
 
 	const startGame = (settings: GameParams) => {
-		setGame(gameObj(window.newGame(settings)));
+		setGame(JSON.parse(window.newGame(settings)));
 	};
 
 	useEffect(() => {

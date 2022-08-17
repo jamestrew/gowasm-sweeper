@@ -7,6 +7,7 @@ declare global {
 		openCell: (x: number, y: number) => string;
 		flagCell: (x: number, y: number) => string;
 		chordedOpen: (x: number, y: number) => string;
+		cellNeighbors: (x: number, y: number) => string;
 		getState: () => string;
 	}
 }

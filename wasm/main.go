@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"math/rand"
 	"syscall/js"
@@ -45,6 +46,15 @@ func chordedOpen(this js.Value, args []js.Value) interface{} {
 	return game.AsJson()
 }
 
+func cellNeighbors(this js.Value, args []js.Value) interface{} {
+	x, y := args[0].Int(), args[1].Int()
+	data, err := json.Marshal(game.CellNeighbors(x, y))
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
 func debugMines(this js.Value, args []js.Value) interface{} {
 	fmt.Println(game.Mines)
 	return nil
@@ -59,6 +69,7 @@ func main() {
 	js.Global().Set("openCell", js.FuncOf(openCell))
 	js.Global().Set("flagCell", js.FuncOf(flagCell))
 	js.Global().Set("chordedOpen", js.FuncOf(chordedOpen))
+	js.Global().Set("cellNeighbors", js.FuncOf(cellNeighbors))
 	js.Global().Set("debugMines", js.FuncOf(debugMines))
 	js.Global().Set("debugState", js.FuncOf(debugState))
 	<-make(chan bool)

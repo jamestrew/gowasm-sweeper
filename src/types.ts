@@ -17,3 +17,8 @@ export enum State {
 	Win,
 	Lose
 }
+
+export type CellPosition = {
+	x: number;
+	y: number;
+}

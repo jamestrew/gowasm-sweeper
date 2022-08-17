@@ -38,7 +38,8 @@ type Game struct {
 }
 
 type Pos struct {
-	X, Y int
+	X int `json:"x"`
+	Y int `json:"y"`
 }
 
 var CustomWidth int = 4
@@ -79,7 +80,7 @@ func (g *Game) CalcAllNeighbors() {
 
 func (g *Game) CalcCellNeighbors(x, y int) int {
 	count := 0
-	for _, pos := range g.cellNeighbors(x, y) {
+	for _, pos := range g.CellNeighbors(x, y) {
 		if g.Mines[pos.Y][pos.X] == 9 {
 			count++
 		}
@@ -96,7 +97,7 @@ func (g *Game) FillMines() {
 
 func (g *Game) CountBlankNeighbors(x, y int) int {
 	count := 0
-	for _, pos := range g.cellNeighbors(x, y) {
+	for _, pos := range g.CellNeighbors(x, y) {
 		if g.Mines[pos.Y][pos.X] == 0 {
 			count++
 		}
@@ -105,7 +106,7 @@ func (g *Game) CountBlankNeighbors(x, y int) int {
 }
 
 func (g *Game) openNeighbors(x, y int) {
-	for _, pos := range g.cellNeighbors(x, y) {
+	for _, pos := range g.CellNeighbors(x, y) {
 		g.Open[pos.Y][pos.X] = true
 	}
 }
@@ -126,7 +127,7 @@ func (g *Game) OpenBlankCells(x, y int) {
 	}
 
 	g.Open[y][x] = true
-	for _, pos := range g.cellNeighbors(x, y) {
+	for _, pos := range g.CellNeighbors(x, y) {
 		if g.Mines[pos.Y][pos.X] == 0 {
 			g.OpenBlankCells(pos.X, pos.Y)
 		}

@@ -40,7 +40,7 @@ func (g *Game) ChordedOpen(x, y int) {
 		return
 	}
 
-	for _, pos := range g.cellNeighbors(x, y) {
+	for _, pos := range g.CellNeighbors(x, y) {
 		g.OpenCell(pos.X, pos.Y)
 	}
 }

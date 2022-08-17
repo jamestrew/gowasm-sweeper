@@ -1,39 +1,49 @@
 import { CELL_SIZE } from "../constants";
-import { GameData } from "../types";
-import { gameObj } from "../utils";
+import { GameData, CellPosition } from "../types";
 import Cell from "./Cell";
 
-import '../App.css'
+import "../App.css";
+import { useState } from "react";
 
 type BoardProps = {
-	board: number[][];
-	setGame: React.Dispatch<GameData>;
+  board: number[][];
+  setGame: React.Dispatch<GameData>;
 };
 
 const Board = ({ board, setGame }: BoardProps) => {
-	const width = board[0].length;
-	const height = board.length;
+  const [hlPositions, setHlPositions] = useState<CellPosition[]>([]);
 
-	const boardWidth = `${CELL_SIZE * width}px`;
-	const boardHeight = `${CELL_SIZE * height}px`;
+  const width = board[0].length;
+  const height = board.length;
 
-	return (
-		<div className="Board" style={{ width: boardWidth, height: boardHeight }}>
-			{board.map((row, i) =>
-				row.map((_, j) => (
-					<Cell
-						x={j}
-						y={i}
-						key={i * width + j}
-						cellType={board[i][j]}
-						openCell={() => setGame(gameObj(window.openCell(j, i)))}
-						flagCell={() => setGame(gameObj(window.flagCell(j, i)))}
-						chordedOpen={() => setGame(gameObj(window.chordedOpen(j, i)))}
-					/>
-				))
-			)}
-		</div>
-	);
+  const boardWidth = `${CELL_SIZE * width}px`;
+  const boardHeight = `${CELL_SIZE * height}px`;
+
+  const isHighlighted = (x: number, y: number): boolean => {
+    return hlPositions.findIndex((pos) => pos.x === x && pos.y === y) !== -1;
+  };
+
+  return (
+    <div className="Board" style={{ width: boardWidth, height: boardHeight }}>
+      {board.map((row, i) =>
+        row.map((_, j) => (
+          <Cell
+            x={j}
+            y={i}
+            key={i * width + j}
+            cellType={board[i][j]}
+            highlight={isHighlighted(j, i)}
+            openCell={() => setGame(JSON.parse(window.openCell(j, i)))}
+            flagCell={() => setGame(JSON.parse(window.flagCell(j, i)))}
+            chordedOpen={() => setGame(JSON.parse(window.chordedOpen(j, i)))}
+            setHighlights={(positions: CellPosition[]) =>
+              setHlPositions(positions)
+            }
+          />
+        ))
+      )}
+    </div>
+  );
 };
 
 export default Board;
