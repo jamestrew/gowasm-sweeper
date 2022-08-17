@@ -195,9 +195,9 @@ func (g *Game) FlagCount() int {
 
 func (g *Game) AsJson() string {
 	type gameData struct {
-		State     GameState
-		Board     [][]int
-		FlagCount int
+		State     GameState `json:"state"`
+		Board     [][]int   `json:"board"`
+		FlagCount int       `json:"flagCount"`
 	}
 
 	data := &gameData{g.State, g.AsArray(), g.FlagCount()}
