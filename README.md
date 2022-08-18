@@ -5,6 +5,3 @@ Built with Go WASM and create-react-app
 
 ---
 #### TODO
-
-- [ ] first click must be an open cell -> still buggy
-
