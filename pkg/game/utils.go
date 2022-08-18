@@ -69,36 +69,6 @@ func (g *Game) CellNeighbors(x, y int) []Pos {
 	return positions
 }
 
-func (g *Game) positionsMineCount(positions []Pos) int {
-	mineCount := 0
-	for _, pos := range positions {
-		if g.Mines[pos.Y][pos.X] == 9 {
-			g.Mines[pos.Y][pos.X] = 0
-			mineCount++
-		}
-	}
-	return mineCount
-}
-
-func (g *Game) randomCellWith(cellType int) Pos {
-	for {
-		pos := Pos{rand.Intn(g.Width), rand.Intn(g.Height)}
-		if g.Mines[pos.Y][pos.X] == cellType {
-			return pos
-		}
-	}
-}
-
-func (g *Game) randomCellNot(cellType int) Pos {
-	for {
-		pos := Pos{rand.Intn(g.Width), rand.Intn(g.Height)}
-		if g.Mines[pos.Y][pos.X] != cellType {
-			return pos
-		}
-	}
-}
-
-// TODO
 func GetCustomBoardParams() (int, int, int) {
 	return CustomWidth, CustomHeight, CustomMineCount
 }

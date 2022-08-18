@@ -1,7 +1,6 @@
 package game_test
 
 import (
-	"math/rand"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
