@@ -64,7 +64,7 @@
 	justify-content: center;
 	background-color: #c0c0c0;
   border: 3px solid black;
-	border-bottom: none;
+  margin-bottom: -3px;
 	height: 50px;
 	width: 200px;
 }

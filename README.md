@@ -7,6 +7,4 @@ Built with Go WASM and create-react-app
 #### TODO
 
 - [ ] first click must be an open cell -> still buggy
-- [ ] UI
-  - [ ] if board width is too small, the scoreboard has missing bottom panel
 
