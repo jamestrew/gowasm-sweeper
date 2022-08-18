@@ -88,10 +88,17 @@ func (g *Game) CalcCellNeighbors(x, y int) int {
 	return count
 }
 
-func (g *Game) FillMines() {
-	minePositions := createMinePositions(g)
+func (g *Game) GenerateCleanMines(firstOpen Pos) {
+	var openArea []Pos
+	if g.isSpaciousBoard() {
+		openArea = append(g.CellNeighbors(firstOpen.X, firstOpen.Y), firstOpen)
+	} else {
+		openArea = []Pos{firstOpen}
+	}
+	minePositions := g.cleanMinePositions(openArea)
+	fmt.Println(minePositions, firstOpen, openArea)
 	for _, pos := range minePositions {
-		g.Mines[pos.Y][pos.X] = 9 // itself a mine
+		g.Mines[pos.Y][pos.X] = 9
 	}
 }
 

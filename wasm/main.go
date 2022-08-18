@@ -22,9 +22,6 @@ func newGame(this js.Value, args []js.Value) interface{} {
 	}
 	rand.Seed(time.Now().UnixNano())
 	game, _ = g.NewGame(difficulty)
-	// TODO: create random seed
-	game.FillMines()
-	game.CalcAllNeighbors()
 	return game.AsJson()
 }
 

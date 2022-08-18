@@ -7,7 +7,8 @@ func (g *Game) OpenCell(x, y int) {
 	}
 
 	if g.State == Unstarted {
-		g.ensureGoodFirstMove(x, y)
+		g.GenerateCleanMines(Pos{x, y})
+		g.CalcAllNeighbors()
 		g.State = Playing
 	}
 

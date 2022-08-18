@@ -12,7 +12,7 @@ func posArray(mineCount int) []Pos {
 	return positions
 }
 
-func isDuplicateMinePos(testPosition Pos, minePositions []Pos) bool {
+func isBadMinePos(testPosition Pos, minePositions []Pos) bool {
 	for _, pos := range minePositions {
 		if testPosition.X == pos.X && testPosition.Y == pos.Y {
 			return true
@@ -27,7 +27,7 @@ func createMinePositions(game *Game) []Pos {
 
 	for minesCreated < game.MineCount {
 		testPosition := Pos{rand.Intn(game.Width), rand.Intn(game.Height)}
-		if !isDuplicateMinePos(testPosition, mines) {
+		if !isBadMinePos(testPosition, mines) {
 			mines[minesCreated] = testPosition
 			minesCreated++
 		}
@@ -35,15 +35,14 @@ func createMinePositions(game *Game) []Pos {
 	return mines
 }
 
-func (g *Game) newMineHomes(noGoZone []Pos, mineCount int) []Pos {
+func (g *Game) cleanMinePositions(noGoZone []Pos) []Pos {
 	minesCreated := 0
-	mines := posArray(mineCount)
+	mines := posArray(g.MineCount)
 
-	for minesCreated < mineCount {
-		testPosition := Pos{rand.Intn(g.Width), rand.Intn(g.Height)}
-		if !isDuplicateMinePos(testPosition, mines) &&
-			g.Mines[testPosition.Y][testPosition.X] != 9 {
-			mines[minesCreated] = testPosition
+	for minesCreated < g.MineCount {
+		pos := Pos{rand.Intn(g.Width), rand.Intn(g.Height)}
+		if !isBadMinePos(pos, mines) && !isBadMinePos(pos, noGoZone) {
+			mines[minesCreated] = pos
 			minesCreated++
 		}
 	}
@@ -133,25 +132,6 @@ func (g *Game) playable() bool {
 	return g.State == Unstarted || g.State == Playing
 }
 
-func (g *Game) blankExists() bool {
+func (g *Game) isSpaciousBoard() bool {
 	return (g.Width*g.Height)-g.MineCount >= 9
-}
-
-func (g *Game) ensureGoodFirstMove(x, y int) {
-	if g.Mines[y][x] == 0 {
-		return
-	}
-
-	if g.blankExists() {
-		neighbors := g.CellNeighbors(x, y)
-		mineCount := g.positionsMineCount(neighbors)
-		for _, pos := range g.newMineHomes(neighbors, mineCount) {
-			g.Mines[pos.Y][pos.X] = 9
-		}
-	} else {
-		emptyPos := g.randomCellNot(9)
-		g.Mines[y][x] = 0
-		g.Mines[emptyPos.Y][emptyPos.X] = 9
-	}
-	g.CalcAllNeighbors()
 }

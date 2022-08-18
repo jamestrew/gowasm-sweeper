@@ -72,24 +72,6 @@ func TestNewGame(t *testing.T) {
 	customTooManyMines()
 }
 
-func TestGenerateMines(t *testing.T) {
-	rand.Seed(69420)
-	g.CustomWidth = 4
-	g.CustomHeight = 3
-	g.CustomMineCount = 4
-
-	game, _ := g.NewGame(g.Custom)
-	game.FillMines()
-
-	expected := [][]int{
-		{0, 0, 0, 9},
-		{9, 9, 0, 0},
-		{0, 0, 9, 0},
-	}
-
-	assert.Equal(t, expected, game.Mines)
-}
-
 func TestCalcAllNeighbors(t *testing.T) {
 	customGame := func() {
 		g.CustomWidth = 4
