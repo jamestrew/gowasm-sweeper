@@ -96,7 +96,6 @@ func (g *Game) GenerateCleanMines(firstOpen Pos) {
 		openArea = []Pos{firstOpen}
 	}
 	minePositions := g.cleanMinePositions(openArea)
-	fmt.Println(minePositions, firstOpen, openArea)
 	for _, pos := range minePositions {
 		g.Mines[pos.Y][pos.X] = 9
 	}
