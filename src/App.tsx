@@ -1,23 +1,26 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import "./App.css";
 
 import { DEFAULT_SETTINGS } from "./constants";
-import { GameData, GameParams, State } from "./types";
+import { GameParams, State } from "./types";
+import { useGame } from './hooks'
 import Board from "./components/Board";
 import OptionsPanel from "./components/Options";
 import Scoreboard from "./components/Scoreboard";
 
-function App() {
-	const [game, setGame] = useState<GameData>();
-	const [settings, setSettings] = useState<GameParams>(DEFAULT_SETTINGS);
 
-	const startGame = (settings: GameParams) => {
-		setGame(JSON.parse(window.newGame(settings)));
-	};
+function App() {
+  const [settings, setSettings] = useState<GameParams>(DEFAULT_SETTINGS);
+	const [game, setGame] = useGame();
+
+	const startGame = useCallback((settings: GameParams) => {
+    setGame(window.newGame(settings));
+	}, [setGame]);
+
 
 	useEffect(() => {
 		startGame(DEFAULT_SETTINGS);
-	}, []);
+	}, [startGame]);
 
 	return (
 		<div className="App">

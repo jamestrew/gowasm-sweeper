@@ -1,5 +1,5 @@
 import { CELL_SIZE } from "../constants";
-import { GameData, CellPosition } from "../types";
+import { CellPosition } from "../types";
 import Cell from "./Cell";
 
 import "../App.css";
@@ -7,7 +7,7 @@ import { useState } from "react";
 
 type BoardProps = {
   board: number[][];
-  setGame: React.Dispatch<GameData>;
+  setGame: (gameStr: string) => void;
 };
 
 const Board = ({ board, setGame }: BoardProps) => {
@@ -33,9 +33,9 @@ const Board = ({ board, setGame }: BoardProps) => {
             key={i * width + j}
             cellType={board[i][j]}
             highlight={isHighlighted(j, i)}
-            openCell={() => setGame(JSON.parse(window.openCell(j, i)))}
-            flagCell={() => setGame(JSON.parse(window.flagCell(j, i)))}
-            chordedOpen={() => setGame(JSON.parse(window.chordedOpen(j, i)))}
+            openCell={() => setGame(window.openCell(j, i))}
+            flagCell={() => setGame(window.flagCell(j, i))}
+            chordedOpen={() => setGame(window.chordedOpen(j, i))}
             setHighlights={(positions: CellPosition[]) =>
               setHlPositions(positions)
             }
