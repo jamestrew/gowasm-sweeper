@@ -92,3 +92,21 @@
 	padding: 12px;
 	font-size: 2em;
 }
+
+.Leaderboards {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.Leaderboard {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.Leaderboard table td {
+  padding: 0em 0em 0em 1em;
+}
+

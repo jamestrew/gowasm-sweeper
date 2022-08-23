@@ -7,6 +7,7 @@ import { useGame } from './hooks'
 import Board from "./components/Board";
 import OptionsPanel from "./components/Options";
 import Scoreboard from "./components/Scoreboard";
+import Leaderboards from "./components/Leaderboards";
 
 
 function App() {
@@ -36,6 +37,7 @@ function App() {
 					setSettings={setSettings}
 					startGame={() => startGame(settings)}
 				/>
+        <Leaderboards />
 			</div>
 		</div>
 	);

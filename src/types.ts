@@ -1,7 +1,7 @@
 export type GameData = {
   state: State;
   board: number[][];
-	flagCount: number;
+  flagCount: number;
 };
 
 export type GameParams = {
@@ -12,13 +12,15 @@ export type GameParams = {
 };
 
 export enum State {
-	Unstarted = 0,
-	Playing,
-	Win,
-	Lose
+  Unstarted = 0,
+  Playing,
+  Win,
+  Lose,
 }
 
 export type CellPosition = {
-	x: number;
-	y: number;
-}
+  x: number;
+  y: number;
+};
+
+export type Score = { name: string; time: number };
