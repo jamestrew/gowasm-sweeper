@@ -40,8 +40,8 @@ const OptionsPanel = ({ settings, setSettings, startGame }: OptionsProps) => {
 						</tr>
 					</thead>
 					<tbody>
-						{BOARD_OPTIONS.map((option, idx) => (
-							<tr key={idx}>
+						{BOARD_OPTIONS.map((option) => (
+							<tr key={option.difficulty}>
 								<DifficultyRow
 									option={option}
 									settings={settings}
