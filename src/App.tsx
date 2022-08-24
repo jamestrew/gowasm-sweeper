@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import "./App.css";
 
 import { DEFAULT_GAME, DEFAULT_SETTINGS } from "./constants";
@@ -8,10 +8,14 @@ import Board from "./components/Board";
 import OptionsPanel from "./components/Options";
 import Scoreboard from "./components/Scoreboard";
 import Leaderboards from "./components/Leaderboards";
+import { useCookies } from "react-cookie";
 
 function App() {
   const [settings, setSettings] = useState<GameParams>(DEFAULT_SETTINGS);
   const [game, setGame] = useGame(DEFAULT_GAME);
+  const [cookies, setCookies] = useCookies();
+
+  const prevState = useRef<State>();
 
   const startGame = useCallback(
     (settings: GameParams) => {
@@ -23,6 +27,20 @@ function App() {
   useEffect(() => {
     startGame(DEFAULT_SETTINGS);
   }, [startGame]);
+
+  useEffect(() => {
+    if (prevState.current === State.Playing && game.state === State.Win) {
+      if (!cookies?.name) {
+        setCookies("name", window.prompt("Enter name to save your score"), {
+          maxAge: 15,
+          sameSite: "lax",
+        });
+      } else {
+        console.log(`You won ${cookies.name} @ ${new Date()}`);
+      }
+    }
+    prevState.current = game.state;
+  }, [game, cookies, setCookies]);
 
   return (
     <div className="App">
