@@ -1,6 +1,6 @@
-import "../App.css"
+import "../App.css";
 
-import { truncateStr } from '../utils';
+import { truncateStr } from "../utils";
 import { Score } from "../types";
 import { DUMMY_LEADERBOARD_DATA } from "../constants";
 
@@ -24,13 +24,15 @@ const Leaderboard = ({ difficulty, scores }: LeaderboardProps) => {
     <div className="Leaderboard">
       <h4>{difficulty}</h4>
       <table>
-        {scores.map((score, idx) => (
-          <tr>
-            <td>{`${idx + 1}.`}</td>
-            <td>{truncateStr(score.name, 15)}</td>
-            <td>{score.time}</td>
-          </tr>
-        ))}
+        <tbody>
+          {scores.map((score, idx) => (
+            <tr key={idx}>
+              <td>{`${idx + 1}.`}</td>
+              <td>{truncateStr(score.name, 15)}</td>
+              <td>{score.time}</td>
+            </tr>
+          ))}
+        </tbody>
       </table>
     </div>
   );
