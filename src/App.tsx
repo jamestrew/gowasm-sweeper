@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { supabase } from "./supabaseClient";
 import "./App.css";
 
 import { DEFAULT_GAME, DEFAULT_SETTINGS } from "./constants";
@@ -9,6 +10,14 @@ import OptionsPanel from "./components/Options";
 import Scoreboard from "./components/Scoreboard";
 import Leaderboards from "./components/Leaderboards";
 import { useCookies } from "react-cookie";
+
+const fetchData = async () => {
+  let { data, error, status } = await supabase
+    .from("difficulties")
+    .select(`id, description`);
+
+  console.log({ data, error, status });
+};
 
 function App() {
   const [settings, setSettings] = useState<GameParams>(DEFAULT_SETTINGS);
@@ -26,6 +35,7 @@ function App() {
 
   useEffect(() => {
     startGame(DEFAULT_SETTINGS);
+    fetchData();
   }, [startGame]);
 
   useEffect(() => {
