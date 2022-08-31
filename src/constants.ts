@@ -1,4 +1,4 @@
-import { GameData, GameParams, Score, State } from "./types";
+import { GameData, GameParams, State } from "./types";
 
 export const DEFAULT_SETTINGS: GameParams = {
   difficulty: 0,
@@ -21,14 +21,4 @@ export const BOARD_OPTIONS: GameParams[] = [
 ];
 
 export const CELL_SIZE = 30;
-
-export const DUMMY_LEADERBOARD_DATA: Score[] = [
-  { name: "john", time: 54 },
-  { name: "jason", time: 55 },
-  { name: "MUNZE KONZA", time: 56 },
-  { name: "TWITCH.TV/SOME_STREAMING_GUY", time: 57 },
-  { name: "TWITCH.TV/SOME_STREAMING_GUY", time: 58 },
-  { name: "TWITCH.TV/SOME_STREAMING_GUY", time: 58 },
-  { name: "TWITCH.TV/SOME_STREAMING_GUY", time: 59 },
-];
 

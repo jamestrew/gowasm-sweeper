@@ -2,7 +2,6 @@ import "../App.css";
 
 import { truncateStr } from "../utils";
 import { LeaderboardsScore, Score } from "../types";
-import { DUMMY_LEADERBOARD_DATA } from "../constants";
 
 const Leaderboards = ({
   beginnerScore,
