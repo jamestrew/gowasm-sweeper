@@ -18,3 +18,19 @@ values
   (1, 'beginner'),
   (2, 'intermediate'),
   (3, 'expert');
+
+insert into leaderboard (name, difficulty_id, time)
+values
+  ('john', 1, 12),
+  ('jason', 1, 15),
+  ('supabase', 1, 7),
+  ('gopher', 1, 14),
+  ('john', 2, 58),
+  ('jason', 2, 98),
+  ('foobar', 2, 111),
+  ('foobar', 2, 154),
+  ('smashing pumps', 3, 154),
+  ('john', 3, 304),
+  ('gopher', 3, 349),
+  ('foobar', 3, 493),
+  ('foobar', 3, 348);
