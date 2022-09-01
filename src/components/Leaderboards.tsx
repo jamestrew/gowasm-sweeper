@@ -32,9 +32,11 @@ const Leaderboard = ({ difficulty, scores }: LeaderboardProps) => {
         <tbody>
           {scores?.map((score, idx) => (
             <tr key={idx}>
-              <td>{`${idx + 1}.`}</td>
-              <td>{truncateStr(score.name, 15)}</td>
-              <td>{score.time}</td>
+              <td style={{ width: "1em", textAlign: "left" }}>{`${
+                idx + 1
+              }.`}</td>
+              <td style={{ width: "8em" }}>{truncateStr(score.name, 15)}</td>
+              <td style={{ width: "2em", textAlign: "right" }}>{score.time}</td>
             </tr>
           ))}
         </tbody>

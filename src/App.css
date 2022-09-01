@@ -97,13 +97,16 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  margin: 30px;
 }
 
 .Leaderboard {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
+  /* width: 225px; */
+  height: 150px;
 }
 
 .Leaderboard table td {
