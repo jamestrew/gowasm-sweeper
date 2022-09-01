@@ -1,5 +1,5 @@
 import { supabase } from "./supabaseClient";
-import { GameData, LeaderboardsScore } from "./types";
+import { Difficulty, GameData, LeaderboardsScore, Score } from "./types";
 
 export const gameObj = (gameDataStr: string): GameData => {
   let ret: GameData = { state: -1, board: [[-1]], flagCount: -1 };
@@ -18,19 +18,36 @@ export const truncateStr = (str: string, length: number): string => {
   return newStr;
 };
 
-export const fetchData = async (): Promise<LeaderboardsScore> => {
-  let { data, error, status } = await supabase
+const fetchDifficultyScores = async (
+  difficulty: Difficulty
+): Promise<Score[]> => {
+  const { data, error } = await supabase
     .from("leaderboard")
     .select(`name, time, difficulties!inner(*)`)
-    .eq("difficulties.description", "beginner")
-    .order('time', { ascending: true });
+    .eq("difficulties.id", difficulty)
+    .order("time", { ascending: true });
 
-  return {
-    beginnerScore: data?.map((row: any) => ({
-      name: row.name,
-      time: row.time,
-    })),
-    intermediateScore: [{ name: "jimbo", time: 96 }],
-    expertScore: [{ name: "timmy", time: 300 }],
-  };
+  if (error) return [];
+
+  return data.map((row: any) => ({
+    name: row.name,
+    time: row.time,
+  }));
+};
+
+export const fetchLeaderboard = async (): Promise<LeaderboardsScore> => {
+  let ret: LeaderboardsScore = {}
+  await Promise.all([
+    fetchDifficultyScores(Difficulty.Beginner),
+    fetchDifficultyScores(Difficulty.Intermediate),
+    fetchDifficultyScores(Difficulty.Expert),
+  ]).then((scores) => {
+    ret = {
+      beginnerScore: scores[Difficulty.Beginner],
+      intermediateScore: scores[Difficulty.Intermediate],
+      expertScore: scores[Difficulty.Expert],
+    };
+  });
+
+  return ret;
 };

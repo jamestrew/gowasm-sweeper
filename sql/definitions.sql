@@ -15,22 +15,23 @@ create table leaderboard (
 
 insert into difficulties (id, description)
 values
-  (1, 'beginner'),
-  (2, 'intermediate'),
-  (3, 'expert');
+  (0, 'beginner'),
+  (1, 'intermediate'),
+  (2, 'expert'),
+  (3, 'custom');
 
 insert into leaderboard (name, difficulty_id, time)
 values
-  ('john', 1, 12),
-  ('jason', 1, 15),
-  ('supabase', 1, 7),
-  ('gopher', 1, 14),
-  ('john', 2, 58),
-  ('jason', 2, 98),
-  ('foobar', 2, 111),
-  ('foobar', 2, 154),
-  ('smashing pumps', 3, 154),
-  ('john', 3, 304),
-  ('gopher', 3, 349),
-  ('foobar', 3, 493),
-  ('foobar', 3, 348);
+  ('john', 0, 12),
+  ('jason', 0, 15),
+  ('supabase', 0, 7),
+  ('gopher', 0, 14),
+  ('john', 1, 58),
+  ('jason', 1, 98),
+  ('foobar', 1, 111),
+  ('foobar', 1, 154),
+  ('smashing pumps', 2, 154),
+  ('john', 2, 304),
+  ('gopher', 2, 349),
+  ('foobar', 2, 493),
+  ('foobar', 2, 348);

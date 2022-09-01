@@ -5,7 +5,7 @@ import "./App.css";
 import { DEFAULT_GAME, DEFAULT_SETTINGS } from "./constants";
 import { GameParams, LeaderboardsScore, State } from "./types";
 import { useGame } from "./hooks";
-import { fetchData } from './utils'
+import { fetchLeaderboard } from './utils'
 import Board from "./components/Board";
 import OptionsPanel from "./components/Options";
 import Scoreboard from "./components/Scoreboard";
@@ -29,7 +29,7 @@ function App() {
 
   useEffect(() => {
     startGame(DEFAULT_SETTINGS);
-    fetchData().then(data => setScores(data));
+    fetchLeaderboard().then(data => setScores(data));
   }, [startGame]);
 
   useEffect(() => {
