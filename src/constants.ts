@@ -1,3 +1,4 @@
+import { CookieSetOptions } from "universal-cookie";
 import { GameData, GameParams, State, Difficulty } from "./types";
 
 export const DEFAULT_SETTINGS: GameParams = {
@@ -22,3 +23,7 @@ export const BOARD_OPTIONS: GameParams[] = [
 
 export const CELL_SIZE = 30;
 
+export const COOKIE_SETTINGS: CookieSetOptions = {
+  maxAge: 15,
+  sameSite: "lax",
+};
