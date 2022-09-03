@@ -5,17 +5,16 @@ import "./App.css";
 import { DEFAULT_GAME, DEFAULT_SETTINGS } from "./constants";
 import { GameParams, LeaderboardsScore, State } from "./types";
 import { useGame } from "./hooks";
-import { fetchLeaderboard } from './utils'
+import { fetchLeaderboard } from "./utils";
 import Board from "./components/Board";
 import OptionsPanel from "./components/Options";
 import Scoreboard from "./components/Scoreboard";
 import Leaderboards from "./components/Leaderboards";
 
-
 function App() {
   const [settings, setSettings] = useState<GameParams>(DEFAULT_SETTINGS);
   const [game, setGame] = useGame(DEFAULT_GAME);
-  const [scores, setScores] = useState<LeaderboardsScore>()
+  const [scores, setScores] = useState<LeaderboardsScore>();
   const [cookies, setCookies] = useCookies();
 
   const prevState = useRef<State>();
@@ -29,7 +28,7 @@ function App() {
 
   useEffect(() => {
     startGame(DEFAULT_SETTINGS);
-    fetchLeaderboard().then(data => setScores(data));
+    fetchLeaderboard().then((data) => setScores(data));
   }, [startGame]);
 
   useEffect(() => {
@@ -61,10 +60,10 @@ function App() {
           startGame={() => startGame(settings)}
         />
         <Leaderboards
-          beginnerScore={scores?.beginnerScore}
-          intermediateScore={scores?.intermediateScore}
-          expertScore={scores?.expertScore}
-          />
+          beginner={scores?.beginner}
+          intermediate={scores?.intermediate}
+          expert={scores?.expert}
+        />
       </div>
     </div>
   );

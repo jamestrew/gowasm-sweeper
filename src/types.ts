@@ -26,9 +26,9 @@ export type CellPosition = {
 export type Score = { name: string; time: number };
 
 export type LeaderboardsScore = {
-  beginnerScore?: Score[];
-  intermediateScore?: Score[];
-  expertScore?: Score[];
+  beginner?: Score[];
+  intermediate?: Score[];
+  expert?: Score[];
 };
 
 export enum Difficulty {

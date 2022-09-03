@@ -4,15 +4,15 @@ import { truncateStr } from "../utils";
 import { LeaderboardsScore, Score } from "../types";
 
 const Leaderboards = ({
-  beginnerScore,
-  intermediateScore,
-  expertScore,
+  beginner,
+  intermediate,
+  expert,
 }: LeaderboardsScore) => {
   return (
     <div className="Leaderboards">
-      <Leaderboard difficulty="Beginner" scores={beginnerScore} />
-      <Leaderboard difficulty="Intermediate" scores={intermediateScore} />
-      <Leaderboard difficulty="Expert" scores={expertScore} />
+      <Leaderboard difficulty="Beginner" scores={beginner} />
+      <Leaderboard difficulty="Intermediate" scores={intermediate} />
+      <Leaderboard difficulty="Expert" scores={expert} />
     </div>
   );
 };
@@ -30,15 +30,19 @@ const Leaderboard = ({ difficulty, scores }: LeaderboardProps) => {
       <h4>{difficulty}</h4>
       <table>
         <tbody>
-          {scores?.map((score, idx) => (
-            <tr key={idx}>
-              <td style={{ width: "1em", textAlign: "left" }}>{`${
-                idx + 1
-              }.`}</td>
-              <td style={{ width: "8em" }}>{truncateStr(score.name, 15)}</td>
-              <td style={{ width: "2em", textAlign: "right" }}>{score.time}</td>
-            </tr>
-          ))}
+          {scores
+            ?.filter((_, idx) => idx < 5)
+            .map((score, idx) => (
+              <tr key={idx}>
+                <td style={{ width: "1em", textAlign: "left" }}>{`${
+                  idx + 1
+                }.`}</td>
+                <td style={{ width: "8em" }}>{truncateStr(score.name, 15)}</td>
+                <td style={{ width: "2em", textAlign: "right" }}>
+                  {score.time}
+                </td>
+              </tr>
+            ))}
         </tbody>
       </table>
     </div>

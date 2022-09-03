@@ -43,9 +43,9 @@ export const fetchLeaderboard = async (): Promise<LeaderboardsScore> => {
     fetchDifficultyScores(Difficulty.Expert),
   ]).then((scores) => {
     ret = {
-      beginnerScore: scores[Difficulty.Beginner],
-      intermediateScore: scores[Difficulty.Intermediate],
-      expertScore: scores[Difficulty.Expert],
+      beginner: scores[Difficulty.Beginner],
+      intermediate: scores[Difficulty.Intermediate],
+      expert: scores[Difficulty.Expert],
     };
   });
 
