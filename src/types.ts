@@ -25,10 +25,15 @@ export type CellPosition = {
 
 export type Score = { name: string; time: number };
 
+export type Scores = {
+  times: Score[];
+  recordCutOff: number;
+}
+
 export type LeaderboardsScore = {
-  beginner?: Score[];
-  intermediate?: Score[];
-  expert?: Score[];
+  beginner?: Scores;
+  intermediate?: Scores;
+  expert?: Scores;
 };
 
 export enum Difficulty {

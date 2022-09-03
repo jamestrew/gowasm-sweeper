@@ -1,5 +1,5 @@
 import { supabase } from "./supabaseClient";
-import { Difficulty, GameData, LeaderboardsScore, Score } from "./types";
+import { Difficulty, GameData, LeaderboardsScore, Score, Scores } from "./types";
 
 export const gameObj = (gameDataStr: string): GameData => {
   let ret: GameData = { state: -1, board: [[-1]], flagCount: -1 };
@@ -25,7 +25,8 @@ const fetchDifficultyScores = async (
     .from("leaderboard")
     .select(`name, time, difficulties!inner(*)`)
     .eq("difficulties.id", difficulty)
-    .order("time", { ascending: true });
+    .order("time", { ascending: true })
+    .limit(10);
 
   if (error) return [];
 
@@ -35,17 +36,24 @@ const fetchDifficultyScores = async (
   }));
 };
 
+const difficultyScores = (difficultyData: Score[]): Scores => {
+  return {
+    times: difficultyData,
+    recordCutOff: difficultyData[difficultyData.length - 1].time
+  }
+}
+
 export const fetchLeaderboard = async (): Promise<LeaderboardsScore> => {
-  let ret: LeaderboardsScore = {}
+  let ret: LeaderboardsScore = {};
   await Promise.all([
     fetchDifficultyScores(Difficulty.Beginner),
     fetchDifficultyScores(Difficulty.Intermediate),
     fetchDifficultyScores(Difficulty.Expert),
   ]).then((scores) => {
     ret = {
-      beginner: scores[Difficulty.Beginner],
-      intermediate: scores[Difficulty.Intermediate],
-      expert: scores[Difficulty.Expert],
+      beginner: difficultyScores(scores[Difficulty.Beginner]),
+      intermediate: difficultyScores(scores[Difficulty.Intermediate]),
+      expert: difficultyScores(scores[Difficulty.Expert]),
     };
   });
 

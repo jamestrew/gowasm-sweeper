@@ -1,7 +1,7 @@
 import "../App.css";
 
 import { truncateStr } from "../utils";
-import { LeaderboardsScore, Score } from "../types";
+import { LeaderboardsScore, Scores } from "../types";
 
 const Leaderboards = ({
   beginner,
@@ -19,7 +19,7 @@ const Leaderboards = ({
 
 type LeaderboardProps = {
   difficulty: string;
-  scores?: Score[];
+  scores?: Scores;
 };
 
 const Leaderboard = ({ difficulty, scores }: LeaderboardProps) => {
@@ -30,8 +30,8 @@ const Leaderboard = ({ difficulty, scores }: LeaderboardProps) => {
       <h4>{difficulty}</h4>
       <table>
         <tbody>
-          {scores
-            ?.filter((_, idx) => idx < 5)
+          {scores?.times
+            .filter((_, idx) => idx < 5)
             .map((score, idx) => (
               <tr key={idx}>
                 <td style={{ width: "1em", textAlign: "left" }}>{`${
