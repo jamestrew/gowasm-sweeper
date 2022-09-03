@@ -36,9 +36,7 @@ const Board = ({ board, setGame }: BoardProps) => {
             openCell={() => setGame(window.openCell(j, i))}
             flagCell={() => setGame(window.flagCell(j, i))}
             chordedOpen={() => setGame(window.chordedOpen(j, i))}
-            setHighlights={(positions: CellPosition[]) =>
-              setHlPositions(positions)
-            }
+            setHighlights={(positions: CellPosition[]) => setHlPositions(positions)}
           />
         ))
       )}

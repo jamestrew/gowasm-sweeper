@@ -47,8 +47,7 @@ const Cell = ({
   const handleMouseDown = (buttons: number) => {
     setClickDown(buttons);
     if (buttons === 1) setHighlights([{ x, y }]);
-    else if (buttons === 3)
-      setHighlights(JSON.parse(window.cellNeighbors(x, y)));
+    else if (buttons === 3) setHighlights(JSON.parse(window.cellNeighbors(x, y)));
   };
 
   return (

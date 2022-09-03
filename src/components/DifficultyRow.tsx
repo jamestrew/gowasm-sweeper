@@ -8,11 +8,7 @@ type DifficultyRowProps = {
   setSettings: (settings: GameParams) => void;
 };
 
-const DifficultyRow = ({
-  option,
-  settings,
-  setSettings,
-}: DifficultyRowProps) => {
+const DifficultyRow = ({ option, settings, setSettings }: DifficultyRowProps) => {
   const difficulties = new Map<Difficulty, string>([
     [Difficulty.Beginner, "Beginner"],
     [Difficulty.Intermediate, "Intermediate"],
@@ -30,9 +26,7 @@ const DifficultyRow = ({
           onChange={(e) =>
             setSettings({
               ...settings,
-              [e.target.name]:
-                parseInt(e.target.value) ||
-                settings[e.target.name as BoardParam],
+              [e.target.name]: parseInt(e.target.value) || settings[e.target.name as BoardParam],
             })
           }
           value={settings[paramType]}
@@ -47,9 +41,7 @@ const DifficultyRow = ({
         <input
           type="radio"
           name="difficulty"
-          onClick={() =>
-            setSettings({ ...settings, difficulty: option.difficulty })
-          }
+          onClick={() => setSettings({ ...settings, difficulty: option.difficulty })}
           defaultChecked={settings.difficulty === option.difficulty}
         />
       </td>

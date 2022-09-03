@@ -26,6 +26,21 @@ function App() {
     [setGame]
   );
 
+  const [seconds, setSeconds] = useState(0);
+
+  useEffect(() => {
+    if (game.state === State.Playing && seconds <= 999) {
+      const myInterval = setInterval(() => {
+        setSeconds((prev) => prev + 1);
+      }, 1000);
+      return () => clearInterval(myInterval);
+    }
+
+    if (game.state === State.Unstarted) {
+      setSeconds(0);
+    }
+  }, [game.state, seconds]);
+
   useEffect(() => {
     startGame(DEFAULT_SETTINGS);
     fetchLeaderboard().then((data) => setScores(data));
@@ -47,6 +62,7 @@ function App() {
 
   return (
     <div className="App">
+      <h1>{seconds}</h1>
       <div className="game">
         <Scoreboard
           state={game?.state || State.Unstarted}

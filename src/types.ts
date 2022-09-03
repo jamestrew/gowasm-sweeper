@@ -41,4 +41,4 @@ export type LeaderboardsScore = {
   beginner?: Scores;
   intermediate?: Scores;
   expert?: Scores;
-}
+};
