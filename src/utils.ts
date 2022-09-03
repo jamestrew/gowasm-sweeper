@@ -18,9 +18,7 @@ export const truncateStr = (str: string, length: number): string => {
   return newStr;
 };
 
-const fetchDifficultyScores = async (
-  difficulty: Difficulty
-): Promise<Score[]> => {
+const fetchDifficultyScores = async (difficulty: Difficulty): Promise<Score[]> => {
   const { data, error } = await supabase
     .from("leaderboard")
     .select(`name, time, difficulties!inner(*)`)
@@ -39,9 +37,9 @@ const fetchDifficultyScores = async (
 const difficultyScores = (difficultyData: Score[]): Scores => {
   return {
     times: difficultyData,
-    recordCutOff: difficultyData[difficultyData.length - 1].time
-  }
-}
+    recordCutOff: difficultyData[difficultyData.length - 1].time,
+  };
+};
 
 export const fetchLeaderboard = async (): Promise<LeaderboardsScore> => {
   let ret: LeaderboardsScore = {};

@@ -5,7 +5,7 @@ export type GameData = {
 };
 
 export type GameParams = {
-  difficulty: Difficulty,
+  difficulty: Difficulty;
   width: number;
   height: number;
   mineCount: number;
@@ -28,17 +28,17 @@ export type Score = { name: string; time: number };
 export type Scores = {
   times: Score[];
   recordCutOff: number;
-}
-
-export type LeaderboardsScore = {
-  beginner?: Scores;
-  intermediate?: Scores;
-  expert?: Scores;
 };
 
 export enum Difficulty {
   Beginner = 0,
   Intermediate,
   Expert,
-  Custom
+  Custom,
+}
+
+export type LeaderboardsScore = {
+  beginner?: Scores;
+  intermediate?: Scores;
+  expert?: Scores;
 }
