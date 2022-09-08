@@ -4,26 +4,9 @@ import "./index.css";
 import App from "./App";
 import { LoadWasm } from "./LoadWasm";
 import reportWebVitals from "./reportWebVitals";
-import { createStore } from "redux";
 import { Provider } from "react-redux";
 
-type testState = number;
-type testAction = {
-  type: "ADD" | "SUBTRACT";
-};
-
-const testReducer = (state: testState = 0, action: testAction): testState => {
-  switch (action.type) {
-    case "ADD":
-      return state + 1;
-    case "SUBTRACT":
-      return state - 1;
-    default:
-      return state;
-  }
-};
-
-const store = createStore(testReducer);
+import { store } from "./store";
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 root.render(

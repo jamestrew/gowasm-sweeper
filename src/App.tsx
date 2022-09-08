@@ -10,18 +10,14 @@ import Board from "./components/Board";
 import OptionsPanel from "./components/Options";
 import Scoreboard from "./components/Scoreboard";
 import Leaderboards from "./components/Leaderboards";
-import { useSelector } from "react-redux";
 
-const selectTest = (state: any) => state;
+import { connector, ReduxProps } from "./store";
 
-function App() {
+function App({ gameData, initGame }: ReduxProps) {
   const [settings, setSettings] = useState<GameParams>(DEFAULT_SETTINGS);
   const [game, setGame] = useGame(DEFAULT_GAME);
   const [scores, setScores] = useState<LeaderboardsScore>();
   const [cookies, setCookies] = useCookies();
-
-  const state = useSelector(selectTest);
-  console.log(state);
 
   const prevState = useRef<State>();
 
@@ -32,25 +28,12 @@ function App() {
     [setGame]
   );
 
-  const [seconds, setSeconds] = useState(0);
-
-  useEffect(() => {
-    if (game.state === State.Playing && seconds <= 999) {
-      const myInterval = setInterval(() => {
-        setSeconds((prev) => prev + 1);
-      }, 1000);
-      return () => clearInterval(myInterval);
-    }
-
-    if (game.state === State.Unstarted) {
-      setSeconds(0);
-    }
-  }, [game.state, seconds]);
-
   useEffect(() => {
     startGame(DEFAULT_SETTINGS);
+    initGame(DEFAULT_SETTINGS); // for later use
     fetchLeaderboard().then((data) => setScores(data));
-  }, [startGame]);
+  }, [startGame, initGame]);
+
 
   useEffect(() => {
     if (prevState.current === State.Playing && game.state === State.Win) {
@@ -68,7 +51,6 @@ function App() {
 
   return (
     <div className="App">
-      <h1>{seconds}</h1>
       <div className="game">
         <Scoreboard
           state={game?.state || State.Unstarted}
@@ -91,4 +73,4 @@ function App() {
   );
 }
 
-export default App;
+export default connector(App);
