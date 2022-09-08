@@ -10,12 +10,18 @@ import Board from "./components/Board";
 import OptionsPanel from "./components/Options";
 import Scoreboard from "./components/Scoreboard";
 import Leaderboards from "./components/Leaderboards";
+import { useSelector } from "react-redux";
+
+const selectTest = (state: any) => state;
 
 function App() {
   const [settings, setSettings] = useState<GameParams>(DEFAULT_SETTINGS);
   const [game, setGame] = useGame(DEFAULT_GAME);
   const [scores, setScores] = useState<LeaderboardsScore>();
   const [cookies, setCookies] = useCookies();
+
+  const state = useSelector(selectTest);
+  console.log(state);
 
   const prevState = useRef<State>();
 

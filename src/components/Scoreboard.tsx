@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import "../App.css";
 
 import { State } from "../types";
@@ -53,6 +54,8 @@ type MinesweeperGuyProps = {
 
 // TODO: onClick restart game with current settings
 const MinesweeperGuy = ({ state, restartGame }: MinesweeperGuyProps) => {
+  const dispatch = useDispatch();
+
   const emoji = new Map<State, string>([
     [State.Unstarted, "😇"],
     [State.Playing, "😇"],
@@ -61,7 +64,13 @@ const MinesweeperGuy = ({ state, restartGame }: MinesweeperGuyProps) => {
   ]);
 
   return (
-    <div className="MinesweeperGuy" onClick={restartGame}>
+    <div
+      className="MinesweeperGuy"
+      onClick={() => {
+        restartGame();
+        dispatch({ type: "ADD" });
+      }}
+    >
       {emoji.get(state)}
     </div>
   );
