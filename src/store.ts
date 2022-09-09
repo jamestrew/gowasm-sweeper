@@ -7,10 +7,12 @@ import {
 } from "react-redux";
 
 import gameDataSlice, { initGame, updateGame } from "./slices/game";
+import timerSlice, { timerIncr, timerReset } from "./slices/timer";
 
 export const store = configureStore({
   reducer: {
     gameData: gameDataSlice,
+    timer: timerSlice,
   },
 });
 
@@ -20,11 +22,14 @@ export const useSelector: TypedUseSelectorHook<RootState> = rawUseSelector;
 
 const mapState = (state: RootState) => ({
   gameData: state.gameData,
+  timerCount: state.timer,
 });
 
 const mapDispatch = {
   initGame,
   updateGame,
+  timerIncr,
+  timerReset,
 };
 
 export const connector = connect(mapState, mapDispatch);

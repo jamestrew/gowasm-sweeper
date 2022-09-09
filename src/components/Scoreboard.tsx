@@ -1,35 +1,40 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import "../App.css";
 
+import { connector, ReduxProps } from "../store";
 import { State } from "../types";
 
 type ScoreboardProps = {
   state: State;
   flagCount: number;
   restartGame: () => void;
-};
+} & ReduxProps;
 
-const Scoreboard = ({ state, flagCount, restartGame }: ScoreboardProps) => {
-  const [seconds, setSeconds] = useState(0);
-
+const Scoreboard = ({
+  restartGame,
+  gameData,
+  timerCount,
+  timerIncr,
+  timerReset,
+}: ScoreboardProps) => {
   useEffect(() => {
-    if (state === State.Playing && seconds <= 999) {
+    if (gameData.state === State.Playing && timerCount <= 999) {
       const myInterval = setInterval(() => {
-        setSeconds((prev) => prev + 1);
+        timerIncr();
       }, 1000);
       return () => clearInterval(myInterval);
     }
 
-    if (state === State.Unstarted) {
-      setSeconds(0);
+    if (gameData.state === State.Unstarted) {
+      timerReset();
     }
-  }, [state, seconds]);
+  }, [gameData, timerCount, timerIncr, timerReset]);
 
   return (
     <div className="Scoreboard">
-      <Counter value={seconds} />
-      <MinesweeperGuy state={state} restartGame={restartGame} />
-      <Counter value={flagCount} />
+      <Counter value={timerCount} />
+      <MinesweeperGuy state={gameData.state} restartGame={restartGame} />
+      <Counter value={gameData.flagCount} />
     </div>
   );
 };
@@ -53,7 +58,6 @@ type MinesweeperGuyProps = {
 
 // TODO: onClick restart game with current settings
 const MinesweeperGuy = ({ state, restartGame }: MinesweeperGuyProps) => {
-
   const emoji = new Map<State, string>([
     [State.Unstarted, "😇"],
     [State.Playing, "😇"],
@@ -62,13 +66,10 @@ const MinesweeperGuy = ({ state, restartGame }: MinesweeperGuyProps) => {
   ]);
 
   return (
-    <div
-      className="MinesweeperGuy"
-      onClick={restartGame}
-    >
+    <div className="MinesweeperGuy" onClick={restartGame}>
       {emoji.get(state)}
     </div>
   );
 };
 
-export default Scoreboard;
+export default connector(Scoreboard);
