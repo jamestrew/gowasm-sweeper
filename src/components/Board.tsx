@@ -1,20 +1,19 @@
 import { CELL_SIZE } from "../constants";
-import { CellPosition } from "../types";
+import { CellPosition, GameData } from "../types";
 import Cell from "./Cell";
 
 import "../App.css";
 import { useState } from "react";
+import { connector, ReduxProps } from "../store";
 
-type BoardProps = {
-  board: number[][];
-  setGame: (gameStr: string) => void;
-};
-
-const Board = ({ board, setGame }: BoardProps) => {
+const Board = ({ game }: ReduxProps) => {
   const [hlPositions, setHlPositions] = useState<CellPosition[]>([]);
+  if (!game) {
+    return null;
+  }
 
-  const width = board[0].length;
-  const height = board.length;
+  const width = game.board[0].length;
+  const height = game.board.length;
 
   const boardWidth = `${CELL_SIZE * width}px`;
   const boardHeight = `${CELL_SIZE * height}px`;
@@ -25,17 +24,14 @@ const Board = ({ board, setGame }: BoardProps) => {
 
   return (
     <div className="Board" style={{ width: boardWidth, height: boardHeight }}>
-      {board.map((row, i) =>
+      {game.board.map((row, i) =>
         row.map((_, j) => (
           <Cell
             x={j}
             y={i}
             key={i * width + j}
-            cellType={board[i][j]}
+            cellType={game.board[i][j]}
             highlight={isHighlighted(j, i)}
-            openCell={() => setGame(window.openCell(j, i))}
-            flagCell={() => setGame(window.flagCell(j, i))}
-            chordedOpen={() => setGame(window.chordedOpen(j, i))}
             setHighlights={(positions: CellPosition[]) => setHlPositions(positions)}
           />
         ))
@@ -44,4 +40,4 @@ const Board = ({ board, setGame }: BoardProps) => {
   );
 };
 
-export default Board;
+export default connector(Board);

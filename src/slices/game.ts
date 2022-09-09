@@ -1,22 +1,38 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import { GameData, GameParams } from "../types";
+import { CellPosition, GameData, GameParams } from "../types";
 import { DEFAULT_GAME } from "../constants";
 
 const gameDataSlice = createSlice({
   name: "gameData",
   initialState: DEFAULT_GAME,
   reducers: {
-    initGame: (state: GameData, action: PayloadAction<GameParams>) => {
+    gameInit: (state: GameData, action: PayloadAction<GameParams>) => {
       state = JSON.parse(window.newGame(action.payload));
       return state;
     },
-    updateGame: (state: GameData, action: PayloadAction<GameData>) => {
-      state = action.payload
+    gameUpdate: (state: GameData, action: PayloadAction<GameData>) => { // deprecate?
+      state = action.payload;
       return state;
-    }
+    },
+    gameOpenCell: (state: GameData, action: PayloadAction<CellPosition>) => {
+      const { x, y } = action.payload;
+      state = JSON.parse(window.openCell(x, y));
+      return state;
+    },
+    gameFlagCell: (state: GameData, action: PayloadAction<CellPosition>) => {
+      const { x, y } = action.payload;
+      state = JSON.parse(window.flagCell(x, y));
+      return state;
+    },
+    gameChordedOpen: (state: GameData, action: PayloadAction<CellPosition>) => {
+      const { x, y } = action.payload;
+      state = JSON.parse(window.chordedOpen(x, y));
+      return state;
+    },
   },
 });
 
-export const { initGame, updateGame } = gameDataSlice.actions;
+export const { gameInit, gameUpdate, gameOpenCell, gameFlagCell, gameChordedOpen } =
+  gameDataSlice.actions;
 export default gameDataSlice.reducer;

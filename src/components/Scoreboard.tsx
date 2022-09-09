@@ -11,30 +11,31 @@ type ScoreboardProps = {
 } & ReduxProps;
 
 const Scoreboard = ({
+  state,
+  flagCount,
   restartGame,
-  gameData,
   timerCount,
   timerIncr,
   timerReset,
 }: ScoreboardProps) => {
   useEffect(() => {
-    if (gameData.state === State.Playing && timerCount <= 999) {
+    if (state === State.Playing && timerCount <= 999) {
       const myInterval = setInterval(() => {
         timerIncr();
       }, 1000);
       return () => clearInterval(myInterval);
     }
 
-    if (gameData.state === State.Unstarted) {
+    if (state === State.Unstarted) {
       timerReset();
     }
-  }, [gameData, timerCount, timerIncr, timerReset]);
+  }, [state, timerCount, timerIncr, timerReset]);
 
   return (
     <div className="Scoreboard">
       <Counter value={timerCount} />
-      <MinesweeperGuy state={gameData.state} restartGame={restartGame} />
-      <Counter value={gameData.flagCount} />
+      <MinesweeperGuy state={state} restartGame={restartGame} />
+      <Counter value={flagCount} />
     </div>
   );
 };

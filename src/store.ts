@@ -6,7 +6,13 @@ import {
   ConnectedProps,
 } from "react-redux";
 
-import gameDataSlice, { initGame, updateGame } from "./slices/game";
+import gameDataSlice, {
+  gameInit,
+  gameUpdate,
+  gameOpenCell,
+  gameFlagCell,
+  gameChordedOpen,
+} from "./slices/game";
 import timerSlice, { timerIncr, timerReset } from "./slices/timer";
 
 export const store = configureStore({
@@ -21,13 +27,16 @@ export type RootState = ReturnType<typeof store.getState>;
 export const useSelector: TypedUseSelectorHook<RootState> = rawUseSelector;
 
 const mapState = (state: RootState) => ({
-  gameData: state.gameData,
+  game: state.gameData,
   timerCount: state.timer,
 });
 
 const mapDispatch = {
-  initGame,
-  updateGame,
+  gameInit,
+  gameUpdate,
+  gameOpenCell,
+  gameFlagCell,
+  gameChordedOpen,
   timerIncr,
   timerReset,
 };
