@@ -14,11 +14,13 @@ import gameDataSlice, {
   gameChordedOpen,
 } from "./slices/game";
 import timerSlice, { timerIncr, timerReset } from "./slices/timer";
+import leaderboardsSlice, { leaderboardsInit } from "./slices/leaderboards";
 
 export const store = configureStore({
   reducer: {
     gameData: gameDataSlice,
     timer: timerSlice,
+    leaderboards: leaderboardsSlice,
   },
 });
 
@@ -29,6 +31,7 @@ export const useSelector: TypedUseSelectorHook<RootState> = rawUseSelector;
 const mapState = (state: RootState) => ({
   game: state.gameData,
   timerCount: state.timer,
+  leaderboards: state.leaderboards,
 });
 
 const mapDispatch = {
@@ -39,6 +42,7 @@ const mapDispatch = {
   gameChordedOpen,
   timerIncr,
   timerReset,
+  leaderboardsInit,
 };
 
 export const connector = connect(mapState, mapDispatch);

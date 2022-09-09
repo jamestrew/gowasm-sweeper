@@ -1,14 +1,20 @@
+import { useEffect } from 'react'
 import "../App.css";
 
-import { truncateStr } from "../utils";
-import { LeaderboardsScore, Scores } from "../types";
+import { fetchLeaderboard, truncateStr } from "../utils";
+import { Scores } from "../types";
+import { connector, ReduxProps } from "../store";
 
-const Leaderboards = ({ beginner, intermediate, expert }: LeaderboardsScore) => {
+const Leaderboards = ({leaderboards, leaderboardsInit}: ReduxProps) => {
+  useEffect(() => {
+    fetchLeaderboard().then(scores => leaderboardsInit(scores))
+  }, [leaderboards, leaderboardsInit])
+
   return (
     <div className="Leaderboards">
-      <Leaderboard difficulty="Beginner" scores={beginner} />
-      <Leaderboard difficulty="Intermediate" scores={intermediate} />
-      <Leaderboard difficulty="Expert" scores={expert} />
+      <Leaderboard difficulty="Beginner" scores={leaderboards.beginner} />
+      <Leaderboard difficulty="Intermediate" scores={leaderboards.intermediate} />
+      <Leaderboard difficulty="Expert" scores={leaderboards.expert} />
     </div>
   );
 };
@@ -41,4 +47,4 @@ const Leaderboard = ({ difficulty, scores }: LeaderboardProps) => {
   );
 };
 
-export default Leaderboards;
+export default connector(Leaderboards);

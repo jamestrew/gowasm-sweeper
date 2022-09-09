@@ -3,8 +3,7 @@ import { useCookies } from "react-cookie";
 
 import "./App.css";
 import { DEFAULT_SETTINGS } from "./constants";
-import { GameParams, LeaderboardsScore, State } from "./types";
-import { fetchLeaderboard } from "./utils";
+import { GameParams, State } from "./types";
 import Board from "./components/Board";
 import OptionsPanel from "./components/Options";
 import Scoreboard from "./components/Scoreboard";
@@ -14,14 +13,12 @@ import { connector, ReduxProps } from "./store";
 
 function App({ game, gameInit }: ReduxProps ) {
   const [settings, setSettings] = useState<GameParams>(DEFAULT_SETTINGS);
-  const [scores, setScores] = useState<LeaderboardsScore>();
   const [cookies, setCookies] = useCookies();
 
   const prevState = useRef<State>();
 
   useEffect(() => {
     gameInit(settings)
-    fetchLeaderboard().then((data) => setScores(data));
   }, [settings, gameInit]);
 
 
@@ -54,11 +51,7 @@ function App({ game, gameInit }: ReduxProps ) {
           setSettings={setSettings}
           startGame={() => gameInit(settings)}
         />
-        <Leaderboards
-          beginner={scores?.beginner}
-          intermediate={scores?.intermediate}
-          expert={scores?.expert}
-        />
+        <Leaderboards />
       </div>
     </div>
   );

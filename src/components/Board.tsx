@@ -1,5 +1,5 @@
 import { CELL_SIZE } from "../constants";
-import { CellPosition, GameData } from "../types";
+import { CellPosition } from "../types";
 import Cell from "./Cell";
 
 import "../App.css";
