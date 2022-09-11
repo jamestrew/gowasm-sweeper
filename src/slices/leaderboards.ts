@@ -5,10 +5,8 @@ const leaderboardsSlice = createSlice({
   name: "leaderboards",
   initialState: {} as LeaderboardsScore,
   reducers: {
-    leaderboardsInit: (state: LeaderboardsScore, action: PayloadAction<LeaderboardsScore>) => {
-      state = action.payload;
-      return state;
-    },
+    leaderboardsInit: (_: LeaderboardsScore, action: PayloadAction<LeaderboardsScore>) =>
+      action.payload,
   },
 });
 

@@ -1,11 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+const initialState = 0;
+
 const timerSlice = createSlice({
   name: "timer",
-  initialState: 0,
+  initialState,
   reducers: {
     timerIncr: (state: number) => state + 1,
-    timerReset: (_) => 0,
+    timerReset: (_) => initialState,
   },
 });
 
