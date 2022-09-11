@@ -14,12 +14,14 @@ import gameDataSlice, {
 } from "./slices/game";
 import timerSlice, { timerIncr, timerReset } from "./slices/timer";
 import leaderboardsSlice, { leaderboardsInit } from "./slices/leaderboards";
+import settingsSlice from "./slices/settings";
 
 export const store = configureStore({
   reducer: {
     gameData: gameDataSlice,
     timer: timerSlice,
     leaderboards: leaderboardsSlice,
+    settings: settingsSlice,
   },
 });
 

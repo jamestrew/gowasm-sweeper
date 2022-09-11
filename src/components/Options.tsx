@@ -1,16 +1,21 @@
 import { useEffect } from "react";
+import { useDispatch } from "react-redux";
 
 import { BOARD_OPTIONS } from "../constants";
+import { useSelector } from "../store";
 import { GameParams } from "../types";
 import DifficultyRow from "./DifficultyRow";
 
+import { settingsUpdate } from "../slices/settings";
+
 type OptionsProps = {
-  settings: GameParams;
-  setSettings: React.Dispatch<GameParams>;
   startGame: () => void;
 };
 
-const OptionsPanel = ({ settings, setSettings, startGame }: OptionsProps) => {
+const OptionsPanel = ({ startGame }: OptionsProps) => {
+  const settings = useSelector((state) => state.settings);
+  const dispatch = useDispatch();
+
   const isValidCustomBoard = (settings: GameParams): boolean => {
     return settings.width * settings.height > settings.mineCount;
   };
@@ -22,9 +27,9 @@ const OptionsPanel = ({ settings, setSettings, startGame }: OptionsProps) => {
         ...settings,
         mineCount: settings.width * settings.height - 1,
       };
-      setSettings(newSettings);
+      dispatch(settingsUpdate(newSettings));
     }
-  }, [settings, setSettings]);
+  }, [settings, dispatch]);
 
   return (
     <>
@@ -42,7 +47,7 @@ const OptionsPanel = ({ settings, setSettings, startGame }: OptionsProps) => {
           <tbody>
             {BOARD_OPTIONS.map((option) => (
               <tr key={option.difficulty}>
-                <DifficultyRow option={option} settings={settings} setSettings={setSettings} />
+                <DifficultyRow option={option} />
               </tr>
             ))}
           </tbody>

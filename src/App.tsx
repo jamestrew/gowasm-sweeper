@@ -1,31 +1,30 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, } from "react";
 import { useCookies } from "react-cookie";
 
 import "./App.css";
-import { DEFAULT_SETTINGS } from "./constants";
-import { GameParams, State } from "./types";
+import { State } from "./types";
 import Board from "./components/Board";
 import OptionsPanel from "./components/Options";
 import Scoreboard from "./components/Scoreboard";
 import Leaderboards from "./components/Leaderboards";
 
-import { gameInit } from './slices/game'
+import { gameInit } from "./slices/game";
 import { useSelector } from "./store";
 import { useDispatch } from "react-redux";
 
 function App() {
-  const [settings, setSettings] = useState<GameParams>(DEFAULT_SETTINGS);
+  const { game, settings } = useSelector((state) => ({
+    game: state.gameData,
+    settings: state.settings,
+  }));
+  const dispatch = useDispatch();
+
   const [cookies, setCookies] = useCookies();
-  const game = useSelector((state) => state.gameData)
-  const dispatch = useDispatch()
-
-
   const prevState = useRef<State>();
 
   useEffect(() => {
-    dispatch(gameInit(settings))
+    dispatch(gameInit(settings));
   }, [settings, dispatch]);
-
 
   useEffect(() => {
     if (prevState.current === State.Playing && game?.state === State.Win) {
@@ -41,7 +40,6 @@ function App() {
     prevState.current = game?.state;
   }, [game, cookies, setCookies]);
 
-
   return (
     <div className="App">
       <div className="game">
@@ -51,11 +49,7 @@ function App() {
           restartGame={() => dispatch(gameInit(settings))}
         />
         <Board />
-        <OptionsPanel
-          settings={settings}
-          setSettings={setSettings}
-          startGame={() => dispatch(gameInit(settings))}
-        />
+        <OptionsPanel startGame={() => dispatch(gameInit(settings))} />
         <Leaderboards />
       </div>
     </div>
