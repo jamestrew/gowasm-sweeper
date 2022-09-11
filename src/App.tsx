@@ -9,17 +9,22 @@ import OptionsPanel from "./components/Options";
 import Scoreboard from "./components/Scoreboard";
 import Leaderboards from "./components/Leaderboards";
 
-import { connector, ReduxProps } from "./store";
+import { gameInit } from './slices/game'
+import { useSelector } from "./store";
+import { useDispatch } from "react-redux";
 
-function App({ game, gameInit }: ReduxProps ) {
+function App() {
   const [settings, setSettings] = useState<GameParams>(DEFAULT_SETTINGS);
   const [cookies, setCookies] = useCookies();
+  const game = useSelector((state) => state.gameData)
+  const dispatch = useDispatch()
+
 
   const prevState = useRef<State>();
 
   useEffect(() => {
-    gameInit(settings)
-  }, [settings, gameInit]);
+    dispatch(gameInit(settings))
+  }, [settings, dispatch]);
 
 
   useEffect(() => {
@@ -43,13 +48,13 @@ function App({ game, gameInit }: ReduxProps ) {
         <Scoreboard
           state={game.state}
           flagCount={game.flagCount}
-          restartGame={() => gameInit(settings)}
+          restartGame={() => dispatch(gameInit(settings))}
         />
         <Board />
         <OptionsPanel
           settings={settings}
           setSettings={setSettings}
-          startGame={() => gameInit(settings)}
+          startGame={() => dispatch(gameInit(settings))}
         />
         <Leaderboards />
       </div>
@@ -57,4 +62,4 @@ function App({ game, gameInit }: ReduxProps ) {
   );
 }
 
-export default connector(App);
+export default App;

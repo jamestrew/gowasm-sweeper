@@ -6,11 +6,11 @@ const leaderboardsSlice = createSlice({
   initialState: {} as LeaderboardsScore,
   reducers: {
     leaderboardsInit: (state: LeaderboardsScore, action: PayloadAction<LeaderboardsScore>) => {
-      state = action.payload
+      state = action.payload;
       return state;
     },
-  }
-})
+  },
+});
 
 export const { leaderboardsInit } = leaderboardsSlice.actions;
 export default leaderboardsSlice.reducer;

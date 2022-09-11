@@ -4,13 +4,11 @@ import Cell from "./Cell";
 
 import "../App.css";
 import { useState } from "react";
-import { connector, ReduxProps } from "../store";
+import { useSelector } from "../store";
 
-const Board = ({ game }: ReduxProps) => {
+const Board = () => {
   const [hlPositions, setHlPositions] = useState<CellPosition[]>([]);
-  if (!game) {
-    return null;
-  }
+  const game = useSelector(state => state.gameData)
 
   const width = game.board[0].length;
   const height = game.board.length;
@@ -40,4 +38,4 @@ const Board = ({ game }: ReduxProps) => {
   );
 };
 
-export default connector(Board);
+export default Board;
