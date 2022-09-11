@@ -8,7 +8,6 @@ import {
 
 import gameDataSlice, {
   gameInit,
-  gameUpdate,
   gameOpenCell,
   gameFlagCell,
   gameChordedOpen,
@@ -36,7 +35,6 @@ const mapState = (state: RootState) => ({
 
 const mapDispatch = {
   gameInit,
-  gameUpdate,
   gameOpenCell,
   gameFlagCell,
   gameChordedOpen,

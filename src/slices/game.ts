@@ -7,32 +7,22 @@ const gameDataSlice = createSlice({
   name: "gameData",
   initialState: DEFAULT_GAME,
   reducers: {
-    gameInit: (state: GameData, action: PayloadAction<GameParams>) => {
-      state = JSON.parse(window.newGame(action.payload));
-      return state;
-    },
-    gameUpdate: (state: GameData, action: PayloadAction<GameData>) => { // deprecate?
-      state = action.payload;
-      return state;
-    },
-    gameOpenCell: (state: GameData, action: PayloadAction<CellPosition>) => {
+    gameInit: (_: GameData, action: PayloadAction<GameParams>) =>
+      JSON.parse(window.newGame(action.payload)),
+    gameOpenCell: (_: GameData, action: PayloadAction<CellPosition>) => {
       const { x, y } = action.payload;
-      state = JSON.parse(window.openCell(x, y));
-      return state;
+      return JSON.parse(window.openCell(x, y));
     },
-    gameFlagCell: (state: GameData, action: PayloadAction<CellPosition>) => {
+    gameFlagCell: (_: GameData, action: PayloadAction<CellPosition>) => {
       const { x, y } = action.payload;
-      state = JSON.parse(window.flagCell(x, y));
-      return state;
+      return JSON.parse(window.flagCell(x, y));
     },
-    gameChordedOpen: (state: GameData, action: PayloadAction<CellPosition>) => {
+    gameChordedOpen: (_: GameData, action: PayloadAction<CellPosition>) => {
       const { x, y } = action.payload;
-      state = JSON.parse(window.chordedOpen(x, y));
-      return state;
+      return JSON.parse(window.chordedOpen(x, y));
     },
   },
 });
 
-export const { gameInit, gameUpdate, gameOpenCell, gameFlagCell, gameChordedOpen } =
-  gameDataSlice.actions;
+export const { gameInit, gameOpenCell, gameFlagCell, gameChordedOpen } = gameDataSlice.actions;
 export default gameDataSlice.reducer;
