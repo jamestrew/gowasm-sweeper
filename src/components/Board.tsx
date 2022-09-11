@@ -1,14 +1,16 @@
 import { CELL_SIZE } from "../constants";
-import { CellPosition } from "../types";
+import { CellPosition, GameData } from "../types";
 import Cell from "./Cell";
 
 import "../App.css";
 import { useState } from "react";
-import { useSelector } from "../store";
 
-const Board = () => {
+type BoardProps = {
+  game: GameData;
+};
+
+const Board = ({ game }: BoardProps) => {
   const [hlPositions, setHlPositions] = useState<CellPosition[]>([]);
-  const game = useSelector(state => state.gameData)
 
   const width = game.board[0].length;
   const height = game.board.length;

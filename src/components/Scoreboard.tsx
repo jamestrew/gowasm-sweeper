@@ -2,43 +2,41 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 
 import "../App.css";
-import { State } from "../types";
+import { GameData, State } from "../types";
 
 import { timerIncr, timerReset } from '../slices/timer'
 import { useSelector } from "../store";
 
 type ScoreboardProps = {
-  state: State;
-  flagCount: number;
+  game: GameData,
   restartGame: () => void;
 };
 
 const Scoreboard = ({
-  state,
-  flagCount,
+  game,
   restartGame,
 }: ScoreboardProps) => {
   const timerCount = useSelector(state => state.timer)
   const dispatch = useDispatch()
 
   useEffect(() => {
-    if (state === State.Playing && timerCount <= 999) {
+    if (game.state === State.Playing && timerCount <= 999) {
       const myInterval = setInterval(() => {
         dispatch(timerIncr())
       }, 1000);
       return () => clearInterval(myInterval);
     }
 
-    if (state === State.Unstarted) {
+    if (game.state === State.Unstarted) {
       dispatch(timerReset())
     }
-  }, [state, timerCount, dispatch ]);
+  }, [game.state, timerCount, dispatch ]);
 
   return (
     <div className="Scoreboard">
       <Counter value={timerCount} />
-      <MinesweeperGuy state={state} restartGame={restartGame} />
-      <Counter value={flagCount} />
+      <MinesweeperGuy state={game.state} restartGame={restartGame} />
+      <Counter value={game.flagCount} />
     </div>
   );
 };

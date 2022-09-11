@@ -1,4 +1,4 @@
-import { useEffect, useRef, } from "react";
+import { useEffect, useRef } from "react";
 import { useCookies } from "react-cookie";
 
 import "./App.css";
@@ -44,11 +44,10 @@ function App() {
     <div className="App">
       <div className="game">
         <Scoreboard
-          state={game.state}
-          flagCount={game.flagCount}
+          game={game}
           restartGame={() => dispatch(gameInit(settings))}
         />
-        <Board />
+        <Board game={game} />
         <OptionsPanel startGame={() => dispatch(gameInit(settings))} />
         <Leaderboards />
       </div>
