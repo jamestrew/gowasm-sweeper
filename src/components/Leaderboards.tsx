@@ -1,15 +1,36 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
+import { useCookies } from "react-cookie";
 import "../App.css";
 
 import { fetchLeaderboard, truncateStr } from "../utils";
-import { Scores } from "../types";
+import { Scores, State } from "../types";
 import { useSelector } from "../store";
 import { leaderboardsInit } from "../slices/leaderboards";
 
 const Leaderboards = () => {
-  const leaderboards = useSelector((state) => state.leaderboards);
+  const [cookies, setCookies] = useCookies();
+  const prevState = useRef<State>();
+
+  const { leaderboards, gameState } = useSelector((state) => ({
+    leaderboards: state.leaderboards,
+    gameState: state.gameData.state,
+  }));
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (prevState.current === State.Playing && gameState === State.Win) {
+      if (!cookies?.name) {
+        setCookies("name", window.prompt("Enter name to save your score"), {
+          maxAge: 15,
+          sameSite: "lax",
+        });
+      } else {
+        console.log(`You won ${cookies.name} @ ${new Date()}`);
+      }
+    }
+    prevState.current = gameState;
+  }, [gameState, cookies, setCookies]);
 
   useEffect(() => {
     fetchLeaderboard().then((scores) => dispatch(leaderboardsInit(scores)));
