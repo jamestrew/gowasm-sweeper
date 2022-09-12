@@ -17,7 +17,7 @@ const Scoreboard = ({ game, restartGame }: ScoreboardProps) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (game.state === State.Playing && timerCount <= 999) {
+    if (game.state === State.Playing && timerCount < 999) {
       const myInterval = setInterval(() => {
         dispatch(timerIncr());
       }, 1000);
