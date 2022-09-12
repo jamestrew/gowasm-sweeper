@@ -47,7 +47,7 @@ type CounterProps = {
 
 const Counter = ({ value }: CounterProps) => {
   return (
-    <div className="Counter" style={{ paddingRight: "1px" }}>
+    <div className="Counter">
       {value.toString()}
     </div>
   );
@@ -58,7 +58,6 @@ type MinesweeperGuyProps = {
   restartGame: () => void;
 };
 
-// TODO: onClick restart game with current settings
 const MinesweeperGuy = ({ state, restartGame }: MinesweeperGuyProps) => {
   const emoji = new Map<State, string>([
     [State.Unstarted, "😇"],

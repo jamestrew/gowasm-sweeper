@@ -86,11 +86,16 @@
   width: 3em;
   height: 1em;
   background-color: grey;
+  padding-right: 1px;
+  cursor: default;
+  user-select: none;
 }
 
 .MinesweeperGuy {
   padding: 12px;
   font-size: 2em;
+  cursor: default;
+  user-select: none;
 }
 
 .Leaderboards {
