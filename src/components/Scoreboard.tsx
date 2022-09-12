@@ -4,33 +4,30 @@ import { useDispatch } from "react-redux";
 import "../App.css";
 import { GameData, State } from "../types";
 
-import { timerIncr, timerReset } from '../slices/timer'
+import { timerIncr, timerReset } from "../slices/timer";
 import { useSelector } from "../store";
 
 type ScoreboardProps = {
-  game: GameData,
+  game: GameData;
   restartGame: () => void;
 };
 
-const Scoreboard = ({
-  game,
-  restartGame,
-}: ScoreboardProps) => {
-  const timerCount = useSelector(state => state.timer)
-  const dispatch = useDispatch()
+const Scoreboard = ({ game, restartGame }: ScoreboardProps) => {
+  const timerCount = useSelector((state) => state.timer);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (game.state === State.Playing && timerCount <= 999) {
       const myInterval = setInterval(() => {
-        dispatch(timerIncr())
+        dispatch(timerIncr());
       }, 1000);
       return () => clearInterval(myInterval);
     }
 
     if (game.state === State.Unstarted) {
-      dispatch(timerReset())
+      dispatch(timerReset());
     }
-  }, [game.state, timerCount, dispatch ]);
+  }, [game.state, timerCount, dispatch]);
 
   return (
     <div className="Scoreboard">
@@ -46,11 +43,7 @@ type CounterProps = {
 };
 
 const Counter = ({ value }: CounterProps) => {
-  return (
-    <div className="Counter">
-      {value.toString()}
-    </div>
-  );
+  return <div className="Counter">{value.toString()}</div>;
 };
 
 type MinesweeperGuyProps = {
