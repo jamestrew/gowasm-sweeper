@@ -8,11 +8,8 @@ import DifficultyRow from "./DifficultyRow";
 
 import { settingsUpdate } from "../slices/settings";
 
-type OptionsProps = {
-  startGame: () => void;
-};
 
-const OptionsPanel = ({ startGame }: OptionsProps) => {
+const OptionsPanel = () => {
   const settings = useSelector((state) => state.settings);
   const dispatch = useDispatch();
 
@@ -53,7 +50,6 @@ const OptionsPanel = ({ startGame }: OptionsProps) => {
           </tbody>
         </table>
       </div>
-      <button onClick={startGame}>New Game</button>
     </>
   );
 };

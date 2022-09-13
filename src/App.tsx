@@ -26,7 +26,7 @@ function App() {
       <div className="game">
         <Scoreboard game={game} restartGame={() => dispatch(gameInit(settings))} />
         <Board game={game} />
-        <OptionsPanel startGame={() => dispatch(gameInit(settings))} />
+        <OptionsPanel />
         <Leaderboards />
       </div>
     </div>
