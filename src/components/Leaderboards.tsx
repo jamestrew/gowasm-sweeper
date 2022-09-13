@@ -3,8 +3,8 @@ import { useDispatch } from "react-redux";
 import { useCookies } from "react-cookie";
 import "../App.css";
 
-import { fetchLeaderboard, truncateStr } from "../utils";
-import { Scores, State } from "../types";
+import { fetchLeaderboard, truncateStr, saveNewScore } from "../utils";
+import { Difficulty, Scores, State } from "../types";
 import { useSelector } from "../store";
 import { leaderboardsInit } from "../slices/leaderboards";
 
@@ -12,25 +12,38 @@ const Leaderboards = () => {
   const [cookies, setCookies] = useCookies();
   const prevState = useRef<State>();
 
-  const { leaderboards, gameState } = useSelector((state) => ({
+  const { leaderboards, game, settings, time } = useSelector((state) => ({
     leaderboards: state.leaderboards,
-    gameState: state.gameData.state,
+    game: state.gameData,
+    settings: state.settings,
+    time: state.timer,
   }));
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (prevState.current === State.Playing && gameState === State.Win) {
-      if (!cookies?.name) {
-        setCookies("name", window.prompt("Enter name to save your score"), {
-          maxAge: 15,
-          sameSite: "lax",
-        });
-      } else {
-        console.log(`You won ${cookies.name} @ ${new Date()}`);
+    const newHighScore = (): boolean => {
+      if (settings.difficulty === Difficulty.Custom) return false;
+      if (time >= (leaderboards[settings.difficulty]?.recordCutOff ?? 0)) return false;
+      return true;
+    };
+
+    const playerName = (): string => {
+      if (cookies?.name) return cookies.name;
+      const playerName = window.prompt("Enter name to save your score")?.trim() ?? "UNKNOWN PLAYER";
+      setCookies("name", playerName, {
+        maxAge: 15,
+        sameSite: "lax",
+      });
+      return playerName;
+    };
+
+    if (prevState.current === State.Playing && game.state === State.Win) {
+      if (newHighScore()) {
+        saveNewScore(playerName(), settings.difficulty, time);
       }
     }
-    prevState.current = gameState;
-  }, [gameState, cookies, setCookies]);
+    prevState.current = game.state;
+  }, [game.state, settings.difficulty, time, cookies, leaderboards, setCookies]);
 
   useEffect(() => {
     fetchLeaderboard().then((scores) => dispatch(leaderboardsInit(scores)));
@@ -38,9 +51,9 @@ const Leaderboards = () => {
 
   return (
     <div className="Leaderboards">
-      <Leaderboard difficulty="Beginner" scores={leaderboards.beginner} />
-      <Leaderboard difficulty="Intermediate" scores={leaderboards.intermediate} />
-      <Leaderboard difficulty="Expert" scores={leaderboards.expert} />
+      <Leaderboard difficulty="Beginner" scores={leaderboards[Difficulty.Beginner]} />
+      <Leaderboard difficulty="Intermediate" scores={leaderboards[Difficulty.Intermediate]} />
+      <Leaderboard difficulty="Expert" scores={leaderboards[Difficulty.Expert]} />
     </div>
   );
 };

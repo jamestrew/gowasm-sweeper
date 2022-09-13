@@ -38,7 +38,8 @@ export enum Difficulty {
 }
 
 export type LeaderboardsScore = {
-  beginner?: Scores;
-  intermediate?: Scores;
-  expert?: Scores;
+  [Difficulty.Beginner]?: Scores;
+  [Difficulty.Intermediate]?: Scores;
+  [Difficulty.Expert]?: Scores;
+  [Difficulty.Custom]?: null;
 };

@@ -49,11 +49,24 @@ export const fetchLeaderboard = async (): Promise<LeaderboardsScore> => {
     fetchDifficultyScores(Difficulty.Expert),
   ]).then((scores) => {
     ret = {
-      beginner: difficultyScores(scores[Difficulty.Beginner]),
-      intermediate: difficultyScores(scores[Difficulty.Intermediate]),
-      expert: difficultyScores(scores[Difficulty.Expert]),
+      [Difficulty.Beginner]: difficultyScores(scores[Difficulty.Beginner]),
+      [Difficulty.Intermediate]: difficultyScores(scores[Difficulty.Intermediate]),
+      [Difficulty.Expert]: difficultyScores(scores[Difficulty.Expert]),
     };
   });
 
   return ret;
+};
+
+export const saveNewScore = async (
+  playerName: string,
+  difficulty: Difficulty,
+  time: number
+): Promise<boolean> => {
+  const { error } = await supabase
+    .from("leaderboard")
+    .insert([{ name: playerName, time: time, difficulty_id: difficulty }])
+    .select(`name, time, difficulties!inner(*)`);
+
+  return error != null;
 };
