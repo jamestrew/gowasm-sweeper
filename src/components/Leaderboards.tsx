@@ -4,9 +4,29 @@ import { useCookies } from "react-cookie";
 import "../App.css";
 
 import { fetchLeaderboard, truncateStr, saveNewScore } from "../utils";
-import { Difficulty, Scores, State } from "../types";
+import { Difficulty, LeaderboardsScore, Scores, State } from "../types";
 import { useSelector } from "../store";
 import { leaderboardsInit } from "../slices/leaderboards";
+import { COOKIE_SETTINGS } from "../constants";
+
+const newHighScore = (
+  time: number,
+  difficulty: Difficulty,
+  leaderboards: LeaderboardsScore
+): boolean => {
+  if (difficulty === Difficulty.Custom) return false;
+  if (time >= (leaderboards[difficulty]?.recordCutOff ?? 0)) return false;
+  return true;
+};
+
+const getPlayerName = (cookies: { [x: string]: string }): string => {
+  if (cookies?.name) return cookies.name;
+  return window.prompt("Enter name to save your score")?.trim() ?? "UNKNOWN PLAYER";
+};
+
+const gameJustWon = (currState: State, prevState?: State): boolean => {
+  return prevState === State.Playing && currState === State.Win;
+};
 
 const Leaderboards = () => {
   const [cookies, setCookies] = useCookies();
@@ -21,26 +41,13 @@ const Leaderboards = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const newHighScore = (): boolean => {
-      if (settings.difficulty === Difficulty.Custom) return false;
-      if (time >= (leaderboards[settings.difficulty]?.recordCutOff ?? 0)) return false;
-      return true;
-    };
-
-    const playerName = (): string => {
-      if (cookies?.name) return cookies.name;
-      const playerName = window.prompt("Enter name to save your score")?.trim() ?? "UNKNOWN PLAYER";
-      setCookies("name", playerName, {
-        maxAge: 15,
-        sameSite: "lax",
-      });
-      return playerName;
-    };
-
-    if (prevState.current === State.Playing && game.state === State.Win) {
-      if (newHighScore()) {
-        saveNewScore(playerName(), settings.difficulty, time);
-      }
+    if (
+      gameJustWon(game.state, prevState.current) &&
+      newHighScore(time, settings.difficulty, leaderboards)
+    ) {
+      const playerName = getPlayerName(cookies);
+      setCookies("name", playerName, COOKIE_SETTINGS);
+      saveNewScore(playerName, settings.difficulty, time);
     }
     prevState.current = game.state;
   }, [game.state, settings.difficulty, time, cookies, leaderboards, setCookies]);
